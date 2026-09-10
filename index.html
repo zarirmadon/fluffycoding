@@ -1,39 +1,463 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <title>Fluffy Coding Plugins</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fluffy Coding by Zarir Madon | GIMP Plugins & Linux Scripts</title>
+
+  <!-- Google Fonts & Tailwind CSS CDN -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            display: ['"Space Grotesk"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f3ff',
+              100: '#e0e7ff',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              purple: '#a855f7',
+              pink: '#ec4899',
+              cyan: '#06b6d4',
+              neonGreen: '#10b981',
+              darkBg: '#090d16',
+              cardBg: '#111827',
+              cardHover: '#1f2937',
+            }
+          },
+          animation: {
+            'glow-pulse': 'glowPulse 3s infinite alternate',
+            'float': 'float 6s ease-in-out infinite',
+          },
+          keyframes: {
+            glowPulse: {
+              '0%': { opacity: '0.3', transform: 'scale(1)' },
+              '100%': { opacity: '0.6', transform: 'scale(1.05)' }
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-8px)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #090d16;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1f2937;
+      border-radius: 5px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #374151;
+    }
+
+    /* Glassmorphism effects */
+    .glass-panel {
+      background: rgba(17, 24, 39, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    
+    .glass-card {
+      background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%), rgba(17, 24, 39, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .glass-card:hover {
+      border-color: rgba(168, 85, 247, 0.4);
+      box-shadow: 0 10px 30px -10px rgba(168, 85, 247, 0.3);
+    }
+
+    /* Text Gradient */
+    .gradient-text {
+      background: linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #06b6d4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .gradient-text-alt {
+      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
 </head>
-<body>
-  <h1>GIMP Plugins & Scripts</h1>
-  <ul id="plugin-list">Loading plugins...</ul>
+
+<body class="bg-[#090d16] text-slate-100 font-sans antialiased selection:bg-purple-500 selection:text-white min-h-screen flex flex-col justify-between relative overflow-x-hidden">
+
+  <div class="fixed top-0 left-1/4 w-[500px] h-[500px] bg-purple-600/20 rounded-full blur-[140px] pointer-events-none animate-glow-pulse -z-10"></div>
+  <div class="fixed top-1/3 right-1/4 w-[400px] h-[400px] bg-cyan-600/15 rounded-full blur-[130px] pointer-events-none animate-glow-pulse -z-10" style="animation-delay: 1.5s;"></div>
+  <div class="fixed bottom-10 left-1/3 w-[600px] h-[600px] bg-pink-600/15 rounded-full blur-[160px] pointer-events-none animate-glow-pulse -z-10" style="animation-delay: 2.5s;"></div>
+
+  <header class="relative pt-16 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center w-full">
+    
+    <!-- Top badge -->
+    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-panel text-xs font-semibold tracking-wide text-purple-300 border border-purple-500/30 mb-6 shadow-lg shadow-purple-950/40">
+      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+      <span>Auckland, NZ • Creative Digital Tools</span>
+    </div>
+
+    <!-- Main Title -->
+    <h1 class="font-display text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight mb-4 leading-tight">
+      <span class="gradient-text">Fluffy Coding</span> 
+      <span class="block sm:inline text-white text-3xl sm:text-5xl lg:text-6xl font-light">by Zarir Madon</span>
+    </h1>
+
+    <p class="max-w-2xl mx-auto text-slate-400 text-base sm:text-lg mb-8 leading-relaxed">
+      A curated suite of custom GIMP plugins, GEGL style filters, Python tools, and Linux automation scripts created to supercharge image editing workflows.
+    </p>
+
+    <!-- Taglines / Tech Pills -->
+    <div class="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 max-w-3xl mx-auto">
+      <span class="px-3 py-1 rounded-lg bg-slate-900/80 border border-slate-700/60 text-slate-300 text-xs sm:text-sm font-medium flex items-center gap-1.5">
+        <i class="fa-solid fa-paintbrush text-purple-400"></i> GIMP Plugins
+      </span>
+      <span class="px-3 py-1 rounded-lg bg-slate-900/80 border border-slate-700/60 text-slate-300 text-xs sm:text-sm font-medium flex items-center gap-1.5">
+        <i class="fa-solid fa-layer-group text-cyan-400"></i> GEGL Gallery
+      </span>
+      <span class="px-3 py-1 rounded-lg bg-slate-900/80 border border-slate-700/60 text-slate-300 text-xs sm:text-sm font-medium flex items-center gap-1.5">
+        <i class="fa-brands fa-python text-amber-400"></i> Python 3
+      </span>
+      <span class="px-3 py-1 rounded-lg bg-slate-900/80 border border-slate-700/60 text-slate-300 text-xs sm:text-sm font-medium flex items-center gap-1.5">
+        <i class="fa-solid fa-wand-magic-sparkles text-pink-400"></i> G'MIC Filters
+      </span>
+      <span class="px-3 py-1 rounded-lg bg-slate-900/80 border border-slate-700/60 text-slate-300 text-xs sm:text-sm font-medium flex items-center gap-1.5">
+        <i class="fa-brands fa-linux text-emerald-400"></i> Linux Scripts
+      </span>
+    </div>
+
+    <!-- Quick Stats Bar -->
+    <div id="stats-bar" class="mt-10 max-w-xl mx-auto glass-panel rounded-2xl p-4 flex justify-around items-center divide-x divide-slate-800 border border-slate-800/80 shadow-2xl">
+      <div class="px-3 text-center">
+        <div id="stat-count" class="font-display text-2xl font-bold text-purple-400">--</div>
+        <div class="text-xs text-slate-400 font-medium uppercase tracking-wider">Repositories</div>
+      </div>
+      <div class="px-3 text-center">
+        <div class="font-display text-2xl font-bold text-cyan-400">Open</div>
+        <div class="text-xs text-slate-400 font-medium uppercase tracking-wider">Source</div>
+      </div>
+      <div class="px-3 text-center">
+        <a href="https://github.com/zarirmadon/fluffycoding" target="_blank" class="font-display text-xs sm:text-sm font-bold text-pink-400 hover:text-pink-300 flex items-center gap-1 justify-center transition-colors">
+          View on GitHub <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+        </a>
+        <div class="text-xs text-slate-400 font-medium uppercase tracking-wider">Main Repo</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full flex-grow">
+    
+    <!-- Section Heading & Search/Filter Controls -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+      <div>
+        <h2 class="font-display text-2xl font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-cubes text-purple-400"></i> Available Tools & Plugins
+        </h2>
+        <p class="text-sm text-slate-400">All tools auto-sync live from the repository's main branch.</p>
+      </div>
+
+      <!-- Search Input -->
+      <div class="relative w-full sm:w-72">
+        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
+        <input 
+          type="text" 
+          id="search-input" 
+          placeholder="Search plugins..." 
+          class="w-full bg-slate-900/90 text-sm text-slate-200 pl-10 pr-4 py-2 rounded-xl border border-slate-800 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all placeholder:text-slate-500"
+        >
+      </div>
+    </div>
+
+    <!-- Grid Container for Cards (3 to 4 on desktop, 2 on tablet, 1 on mobile) -->
+    <div id="plugin-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <!-- Loading Skeletons rendered by JavaScript -->
+      <div class="glass-card rounded-2xl overflow-hidden border border-slate-800 p-4 animate-pulse">
+        <div class="w-full h-36 bg-slate-800/60 rounded-xl mb-4"></div>
+        <div class="h-5 bg-slate-800/80 rounded w-3/4 mb-2"></div>
+        <div class="h-3 bg-slate-800/60 rounded w-full mb-1"></div>
+        <div class="h-3 bg-slate-800/60 rounded w-5/6 mb-4"></div>
+        <div class="h-8 bg-slate-800/80 rounded-lg w-full"></div>
+      </div>
+      <div class="glass-card rounded-2xl overflow-hidden border border-slate-800 p-4 animate-pulse">
+        <div class="w-full h-36 bg-slate-800/60 rounded-xl mb-4"></div>
+        <div class="h-5 bg-slate-800/80 rounded w-3/4 mb-2"></div>
+        <div class="h-3 bg-slate-800/60 rounded w-full mb-1"></div>
+        <div class="h-3 bg-slate-800/60 rounded w-5/6 mb-4"></div>
+        <div class="h-8 bg-slate-800/80 rounded-lg w-full"></div>
+      </div>
+      <div class="glass-card rounded-2xl overflow-hidden border border-slate-800 p-4 animate-pulse">
+        <div class="w-full h-36 bg-slate-800/60 rounded-xl mb-4"></div>
+        <div class="h-5 bg-slate-800/80 rounded w-3/4 mb-2"></div>
+        <div class="h-3 bg-slate-800/60 rounded w-full mb-1"></div>
+        <div class="h-3 bg-slate-800/60 rounded w-5/6 mb-4"></div>
+        <div class="h-8 bg-slate-800/80 rounded-lg w-full"></div>
+      </div>
+      <div class="glass-card rounded-2xl overflow-hidden border border-slate-800 p-4 animate-pulse">
+        <div class="w-full h-36 bg-slate-800/60 rounded-xl mb-4"></div>
+        <div class="h-5 bg-slate-800/80 rounded w-3/4 mb-2"></div>
+        <div class="h-3 bg-slate-800/60 rounded w-full mb-1"></div>
+        <div class="h-3 bg-slate-800/60 rounded w-5/6 mb-4"></div>
+        <div class="h-8 bg-slate-800/80 rounded-lg w-full"></div>
+      </div>
+    </div>
+
+    <!-- Empty/Error Message Container -->
+    <div id="status-message" class="hidden text-center py-16 glass-panel rounded-2xl border border-slate-800 mt-4">
+      <i class="fa-solid fa-folder-open text-4xl text-slate-600 mb-3"></i>
+      <h3 class="text-lg font-semibold text-slate-300">No plugins found</h3>
+      <p class="text-sm text-slate-500 max-w-md mx-auto mt-1">Try adjusting your search terms or verify your GitHub repository branch.</p>
+    </div>
+  </main>
+
+  <footer class="mt-20 border-t border-slate-800/80 bg-slate-950/80 backdrop-blur-md relative z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+        
+        <!-- About Section -->
+        <div class="md:col-span-7 glass-panel p-6 sm:p-8 rounded-2xl border border-slate-800/90 relative overflow-hidden">
+          <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-purple-600/10 rounded-full blur-2xl pointer-events-none"></div>
+          
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-purple-500 via-pink-500 to-cyan-400 p-0.5 shadow-lg shadow-purple-500/20">
+              <img 
+                src="https://github.com/zarirmadon.png" 
+                alt="Zarir Madon" 
+                class="w-full h-full rounded-full object-cover bg-slate-900"
+                onerror="this.src='https://placehold.co/100x100/1e1b4b/a855f7?text=ZM'"
+              >
+            </div>
+            <div>
+              <h3 class="font-display text-xl font-bold text-white">About Fluffy Coding</h3>
+              <p class="text-xs text-purple-400 font-medium">By Zarir Madon • Auckland, New Zealand</p>
+            </div>
+          </div>
+
+          <p class="text-sm text-slate-300 leading-relaxed mb-4">
+            I am a Creative Digital Artist and developer who builds open-source image editing enhancements, Python automation utilities, and specialized color grading tools for GIMP and Linux workflows.
+          </p>
+
+          <div class="flex flex-wrap gap-3">
+            <a href="http://www.zarirmadon.com" target="_blank" class="inline-flex items-center gap-2 text-xs font-semibold px-3.5 py-2 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 border border-purple-500/30 transition-all">
+              <i class="fa-solid fa-globe"></i> zarirmadon.com
+            </a>
+            <a href="https://github.com/zarirmadon" target="_blank" class="inline-flex items-center gap-2 text-xs font-semibold px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all">
+              <i class="fa-brands fa-github"></i> GitHub Profile
+            </a>
+          </div>
+        </div>
+
+        <!-- Links & Support -->
+        <div class="md:col-span-5 flex flex-col justify-between h-full space-y-6">
+          <div class="glass-panel p-6 rounded-2xl border border-slate-800/90">
+            <h4 class="font-display text-sm font-bold text-white uppercase tracking-wider mb-3 flex items-center gap-2">
+              <i class="fa-solid fa-heart text-pink-500"></i> Support & Contribution
+            </h4>
+            <p class="text-xs text-slate-400 leading-relaxed mb-4">
+              All tools are open-source and free for artists and developers worldwide. Contributions, feedback, and star ratings on GitHub are greatly appreciated!
+            </p>
+            <div class="flex items-center gap-3">
+              <a href="https://github.com/zarirmadon/fluffycoding" target="_blank" class="w-full text-center text-xs font-bold py-2.5 px-4 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white shadow-lg shadow-purple-900/30 transition-all">
+                <i class="fa-regular fa-star mr-1.5"></i> Star Repository
+              </a>
+            </div>
+          </div>
+
+          <div class="text-center md:text-right text-xs text-slate-500">
+            &copy; <span id="year">2026</span> Zarir Madon. Built with GitHub Pages.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </footer>
 
   <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
     const username = 'zarirmadon';
     const repo = 'fluffycoding';
     const apiUrl = `https://api.github.com/repos/${username}/${repo}/contents/`;
 
-    fetch(apiUrl)
-      .then(response => response.json())
-      .then(data => {
-        const listElement = document.getElementById('plugin-list');
-        listElement.innerHTML = '';
+    let allPlugins = [];
+
+    // Aesthetic color combinations for visual fallback banners
+    const gradientPresets = [
+      'from-purple-900/80 via-slate-900 to-indigo-950',
+      'from-pink-950/80 via-slate-900 to-purple-950',
+      'from-cyan-950/80 via-slate-900 to-blue-950',
+      'from-emerald-950/80 via-slate-900 to-teal-950',
+      'from-amber-950/80 via-slate-900 to-rose-950',
+      'from-fuchsia-950/80 via-slate-900 to-violet-950'
+    ];
+
+    const iconPresets = [
+      'fa-paintbrush', 'fa-wand-magic-sparkles', 'fa-sliders', 
+      'fa-layer-group', 'fa-code-branch', 'fa-gear', 
+      'fa-palette', 'fa-photo-film', 'fa-terminal'
+    ];
+
+    // Helper: Generate clean title
+    function formatTitle(folderName) {
+      return folderName
+        .replace(/-/g, ' ')
+        .replace(/_/g, ' ')
+        .trim();
+    }
+
+    // Helper: Infer category badge & icon
+    function getPluginCategory(folderName) {
+      const lower = folderName.toLowerCase();
+      if (lower.includes('gegl')) return { label: 'GEGL Filter', color: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30', icon: 'fa-layer-group' };
+      if (lower.includes('gimp')) return { label: 'GIMP Plugin', color: 'bg-purple-500/20 text-purple-300 border-purple-500/30', icon: 'fa-paintbrush' };
+      if (lower.includes('python') || lower.includes('script')) return { label: 'Python Utility', color: 'bg-amber-500/20 text-amber-300 border-amber-500/30', icon: 'fa-brands fa-python' };
+      if (lower.includes('gmic')) return { label: 'G\'MIC Filter', color: 'bg-pink-500/20 text-pink-300 border-pink-500/30', icon: 'fa-wand-magic-sparkles' };
+      return { label: 'Linux Tool', color: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30', icon: 'fa-terminal' };
+    }
+
+    // Main API Fetcher
+    async function fetchPlugins() {
+      const grid = document.getElementById('plugin-grid');
+      const statusMsg = document.getElementById('status-message');
+      const statCount = document.getElementById('stat-count');
+
+      try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         
-        const folders = data.filter(item => item.type === 'dir');
+        const data = await response.json();
         
-        folders.forEach(folder => {
-          const li = document.createElement('li');
-          const a = document.createElement('a');
-          a.href = folder.html_url; 
-          a.textContent = folder.name;
-          a.target = '_blank';
-          li.appendChild(a);
-          listElement.appendChild(li);
-        });
-      })
-      .catch(error => {
-        document.getElementById('plugin-list').textContent = 'Failed to load plugins.';
+        // Filter only subdirectories (plugins/tools)
+        const folders = data.filter(item => item.type === 'dir' && !item.name.startsWith('.'));
+        
+        statCount.textContent = folders.length;
+        allPlugins = folders;
+
+        if (folders.length === 0) {
+          grid.classList.add('hidden');
+          statusMsg.classList.remove('hidden');
+          return;
+        }
+
+        renderGrid(folders);
+
+      } catch (error) {
+        console.error('Error loading GitHub repository content:', error);
+        grid.innerHTML = '';
+        statusMsg.classList.remove('hidden');
+        statusMsg.querySelector('h3').textContent = 'Unable to load repository data';
+        statusMsg.querySelector('p').textContent = 'API limit reached or network issue. Please visit the GitHub repo directly.';
+      }
+    }
+
+    // Render cards into grid
+    function renderGrid(items) {
+      const grid = document.getElementById('plugin-grid');
+      const statusMsg = document.getElementById('status-message');
+      grid.innerHTML = '';
+
+      if (items.length === 0) {
+        statusMsg.classList.remove('hidden');
+        return;
+      } else {
+        statusMsg.classList.add('hidden');
+      }
+
+      items.forEach((folder, idx) => {
+        const title = formatTitle(folder.name);
+        const category = getPluginCategory(folder.name);
+        const gradient = gradientPresets[idx % gradientPresets.length];
+        const randomIcon = iconPresets[idx % iconPresets.length];
+
+        const card = document.createElement('div');
+        card.className = 'glass-card rounded-2xl overflow-hidden border border-slate-800/80 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1.5 group';
+
+        // Raw image URL fallback preview inside folder (e.g. preview.jpg)
+        const rawPreviewUrl = `https://raw.githubusercontent.com/${username}/${repo}/main/${encodeURIComponent(folder.name)}/preview.jpg`;
+
+        card.innerHTML = `
+          <div>
+            <!-- Banner / Image Area -->
+            <div class="relative w-full h-36 bg-gradient-to-br ${gradient} p-4 flex items-center justify-center overflow-hidden border-b border-slate-800/60">
+              
+              <!-- Subtle Background Icon Blur -->
+              <i class="fa-solid ${randomIcon} text-7xl text-white/5 absolute -right-3 -bottom-3 transform -rotate-12 group-hover:scale-125 transition-transform duration-500"></i>
+              
+              <!-- Center Icon / Preview Image -->
+              <div class="relative z-10 text-center">
+                <div class="w-12 h-12 rounded-xl bg-slate-900/80 border border-slate-700/80 flex items-center justify-center mx-auto mb-1 text-purple-400 group-hover:text-pink-400 group-hover:scale-110 transition-all duration-300 shadow-lg">
+                  <i class="fa-solid ${category.icon} text-xl"></i>
+                </div>
+              </div>
+
+              <!-- Top Category Badge -->
+              <span class="absolute top-3 left-3 text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-md border ${category.color} backdrop-blur-md">
+                ${category.label}
+              </span>
+            </div>
+
+            <!-- Card Body -->
+            <div class="p-5">
+              <h3 class="font-display font-bold text-lg text-white group-hover:text-purple-300 transition-colors line-clamp-1 mb-2">
+                ${title}
+              </h3>
+              
+              <p class="text-xs text-slate-400 leading-relaxed line-clamp-3 mb-4">
+                Specialized python script / filter tool tailored for GIMP and Linux imaging workflows. Explore repository for installation & scripts.
+              </p>
+            </div>
+          </div>
+
+          <!-- Card Footer Action Button -->
+          <div class="px-5 pb-5 pt-0">
+            <a 
+              href="${folder.html_url}" 
+              target="_blank" 
+              class="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-slate-800/90 hover:bg-purple-600 text-xs font-semibold text-slate-200 hover:text-white border border-slate-700/70 hover:border-purple-500 transition-all duration-200 shadow-md group/btn"
+            >
+              <span>Explore Plugin</span>
+              <i class="fa-solid fa-arrow-right text-[10px] group-hover/btn:translate-x-1 transition-transform"></i>
+            </a>
+          </div>
+        `;
+
+        grid.appendChild(card);
       });
+    }
+
+    // Filter cards live via search input
+    document.getElementById('search-input').addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase().trim();
+      const filtered = allPlugins.filter(p => p.name.toLowerCase().includes(query));
+      renderGrid(filtered);
+    });
+
+    // Initialize on page load
+    window.addEventListener('DOMContentLoaded', fetchPlugins);
   </script>
 </body>
 </html>
