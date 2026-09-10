@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fluffy Coding Plugins</title>
+</head>
+<body>
+  <h1>GIMP Plugins & Scripts</h1>
+  <ul id="plugin-list">Loading plugins...</ul>
+
+  <script>
+    const username = 'zarirmadon';
+    const repo = 'fluffycoding';
+    const apiUrl = `https://api.github.com/repos/${username}/${repo}/contents/`;
+
+    fetch(apiUrl)
+      .then(response => response.json())
+      .then(data => {
+        const listElement = document.getElementById('plugin-list');
+        listElement.innerHTML = '';
+        
+        const folders = data.filter(item => item.type === 'dir');
+        
+        folders.forEach(folder => {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.href = folder.html_url; 
+          a.textContent = folder.name;
+          a.target = '_blank';
+          li.appendChild(a);
+          listElement.appendChild(li);
+        });
+      })
+      .catch(error => {
+        document.getElementById('plugin-list').textContent = 'Failed to load plugins.';
+      });
+  </script>
+</body>
+</html>
