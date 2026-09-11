@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Fluffy Coding — creative tools for curious minds.">
+<title>Fluffy Coding — Creative Tools</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
+:root{
+  --paper:#eee9df;--ink:#171714;--muted:#716e65;--line:#cfc8ba;
+  --card:#f7f3eb;--accent:#c85d3e;--accent2:#66755a;--blue:#45647b;
+  --shadow:0 18px 50px rgba(35,31,24,.10);
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Manrope,system-ui,sans-serif}
+a{color:inherit;text-decoration:none}
+header{padding:24px 5vw 0;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;gap:12px;align-items:center;font-weight:800;letter-spacing:-.04em;font-size:1.1rem}
+.mark{width:35px;height:35px;border:2px solid var(--ink);border-radius:12px 15px 10px 16px;display:grid;place-items:center;font-weight:800}
+nav{display:flex;gap:25px;font:500 12px "DM Mono",monospace;text-transform:uppercase;letter-spacing:.08em}
+nav a{opacity:.65}nav a:hover{opacity:1}
+.hero{min-height:72vh;padding:10vh 5vw 7vh;display:grid;grid-template-columns:1.2fr .8fr;gap:7vw;align-items:end}
+.kicker{font:500 12px "DM Mono",monospace;text-transform:uppercase;letter-spacing:.12em;color:var(--accent)}
+h1{font-size:clamp(4.5rem,11vw,11rem);line-height:.79;letter-spacing:-.09em;margin:18px 0 30px;max-width:900px}
+.hero-copy{max-width:420px;font-size:1.08rem;line-height:1.7;color:#555249}
+.hero-note{align-self:start;justify-self:end;max-width:260px;font:400 12px/1.65 "DM Mono",monospace;color:var(--muted)}
+.hero-note b{color:var(--ink)}
+.intro{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 5vw;display:flex;justify-content:space-between;gap:30px;font:500 11px "DM Mono",monospace;text-transform:uppercase;letter-spacing:.08em}
+main{padding:8vw 5vw}
+.section-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:35px}
+h2{font-size:clamp(2.4rem,5vw,5.5rem);letter-spacing:-.07em;line-height:.9;margin:0}
+.status{font:11px "DM Mono",monospace;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}
+.card{grid-column:span 4;background:var(--card);border:1px solid var(--line);min-height:380px;padding:22px;display:flex;flex-direction:column;position:relative;overflow:hidden;transition:.35s ease;box-shadow:none}
+.card:nth-child(3n+2){transform:translateY(35px)}.card:hover{transform:translateY(-7px);box-shadow:var(--shadow)}
+.card:nth-child(3n+2):hover{transform:translateY(28px)}
+.thumb{height:180px;border-radius:8px;background:#ddd5c6;display:grid;place-items:center;overflow:hidden;margin-bottom:22px}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.placeholder{font-size:4rem;letter-spacing:-.1em;font-weight:800;opacity:.15}
+.meta{font:10px "DM Mono",monospace;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+.card h3{font-size:1.55rem;letter-spacing:-.05em;margin:9px 0}
+.card p{font-size:.88rem;line-height:1.55;color:#656157;margin:0 0 20px}
+.actions{margin-top:auto;display:flex;gap:9px}
+.btn{border:1px solid var(--ink);padding:10px 13px;font:500 10px "DM Mono",monospace;text-transform:uppercase;letter-spacing:.06em}
+.btn.primary{background:var(--ink);color:var(--paper)}
+.empty{grid-column:1/-1;padding:70px 0;text-align:center;color:var(--muted);font:12px "DM Mono",monospace}
+.about{margin-top:12vw;display:grid;grid-template-columns:1fr 1fr;gap:10vw;align-items:start}
+.about h2{max-width:600px}.about p{font-size:1.15rem;line-height:1.8;color:#59564e}
+footer{border-top:1px solid var(--line);padding:25px 5vw 40px;display:flex;justify-content:space-between;font:10px "DM Mono",monospace;text-transform:uppercase;color:var(--muted)}
+@media(max-width:800px){nav{display:none}.hero{grid-template-columns:1fr;min-height:auto;padding-top:14vh}.hero-note{justify-self:start}.card{grid-column:span 12}.card:nth-child(3n+2){transform:none}.about{grid-template-columns:1fr}.intro{flex-direction:column;gap:8px}footer{flex-direction:column;gap:12px}}
+</style>
+</head>
+<body>
+<header>
+  <a class="brand" href="#"><span class="mark">F</span><span>FLUFFY CODING</span></a>
+  <nav><a href="#tools">Tools</a><a href="#about">About</a><a id="githubNav" href="#" target="_blank">GitHub ↗</a></nav>
+</header>
+
+<section class="hero">
+  <div>
+    <div class="kicker">Creative software / independent workshop</div>
+    <h1>Make<br>strange<br>things.</h1>
+    <div class="hero-copy">Small, useful and occasionally ridiculous tools for artists, photographers and curious people who like making computers do interesting things.</div>
+  </div>
+  <div class="hero-note">
+    <b>FLUFFY CODING</b><br>
+    An evolving collection of creative experiments, plugins and tools.<br><br>
+    The catalogue below is read directly from the <b>main</b> branch of GitHub — add a directory and the site can discover it automatically.
+  </div>
+</section>
+
+<div class="intro"><span>01 / Workshop catalogue</span><span id="updated">Connecting to GitHub…</span></div>
+
+<main id="tools">
+  <div class="section-head">
+    <h2>The<br>workshop</h2>
+    <div class="status" id="count">Loading directories…</div>
+  </div>
+  <div class="grid" id="grid"><div class="empty">Reading the main branch…</div></div>
+
+  <section class="about" id="about">
+    <h2>Software with<br>a little personality.</h2>
+    <div>
+      <p>Fluffy Coding is where creative coding projects live: image tools, G'MIC filters, GIMP plugins, experiments and other useful oddities.</p>
+      <p>The website deliberately stays out of the way. The GitHub repository is the source of truth; this page turns its directories into a living catalogue.</p>
+    </div>
+  </section>
+</main>
+
+<footer><span>© Fluffy Coding / Zarir Madon</span><span>Built from GitHub • No database</span></footer>
+
+<script>
+/* ============================================================
+   CONFIGURATION
+   Change only these two values for another GitHub repository.
+   ============================================================ */
+const GITHUB_OWNER = "zarirmadon";
+const GITHUB_REPO  = "fluffycoding";
+const BRANCH       = "main";
+
+/* Optional: directories that should not appear as projects. */
+const HIDDEN = new Set([".github",".git","screenshots","assets","docs","node_modules"]);
+
+const api = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents?ref=${encodeURIComponent(BRANCH)}`;
+const rawBase = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${BRANCH}/`;
+
+document.getElementById("githubNav").href = `https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}`;
+
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function title(s){return s.replace(/[-_]+/g," ").replace(/\b\w/g,c=>c.toUpperCase())}
+function chooseDescription(text,name){
+  if(!text) return `A Fluffy Coding project from the ${name} directory.`;
+  const lines=text.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+  const line=lines.find(x=>!x.startsWith("#") && !x.startsWith("```") && x.length>20);
+  return (line||`A Fluffy Coding project from the ${name} directory.`).replace(/[*`>#]/g,"").slice(0,180);
+}
+function chooseImage(files,dir){
+  const image=files.find(x=>/\.(png|jpe?g|webp|gif)$/i.test(x.name) && !/screenshot/i.test(x.name));
+  return image ? rawBase + encodeURIComponent(dir) + "/" + encodeURIComponent(image.name) : "";
+}
+async function getText(url){
+  const r=await fetch(url); if(!r.ok) return ""; return await r.text();
+}
+async function build(){
+  const grid=document.getElementById("grid");
+  try{
+    const r=await fetch(api,{headers:{"Accept":"application/vnd.github+json"}});
+    if(!r.ok) throw new Error(`GitHub returned ${r.status}`);
+    const root=await r.json();
+    const dirs=root.filter(x=>x.type==="dir" && !HIDDEN.has(x.name));
+    const cards=[];
+    for(const d of dirs){
+      let files=[];
+      try{
+        const fr=await fetch(d.url); if(fr.ok) files=await fr.json();
+      }catch{}
+      const readme=files.find(x=>/^readme(\.md|\.txt)?$/i.test(x.name));
+      const description=readme ? chooseDescription(await getText(readme.download_url),d.name) : chooseDescription("",d.name);
+      const image=chooseImage(files,d.name);
+      cards.push({d,files,description,image});
+    }
+    cards.sort((a,b)=>a.d.name.localeCompare(b.d.name));
+    grid.innerHTML = cards.length ? cards.map(({d,description,image},i)=>`
+      <article class="card">
+        <div class="thumb">${image?`<img src="${esc(image)}" loading="lazy" alt="">`:`<div class="placeholder">${String(i+1).padStart(2,"0")}</div>`}</div>
+        <div class="meta">PROJECT ${String(i+1).padStart(2,"0")} · MAIN</div>
+        <h3>${esc(title(d.name))}</h3>
+        <p>${esc(description)}</p>
+        <div class="actions">
+          <a class="btn primary" href="${esc(d.html_url)}" target="_blank" rel="noopener">View project ↗</a>
+          <a class="btn" href="${esc(d.html_url)}/archive/refs/heads/${BRANCH}.zip" target="_blank" rel="noopener">Download</a>
+        </div>
+      </article>`).join("") : `<div class="empty">No project directories found in the main branch.</div>`;
+    document.getElementById("count").textContent=`${cards.length} ${cards.length===1?"project":"projects"} discovered`;
+    document.getElementById("updated").textContent=`LIVE FROM ${GITHUB_OWNER}/${GITHUB_REPO}`;
+  }catch(e){
+    grid.innerHTML=`<div class="empty">Could not read GitHub right now.<br><br><a class="btn primary" href="https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}" target="_blank">Open repository ↗</a><br><br><small>${esc(e.message)}</small></div>`;
+    document.getElementById("count").textContent="GitHub unavailable";
+    document.getElementById("updated").textContent="OFFLINE";
+  }
+}
+build();
+</script>
+</body>
+</html>
