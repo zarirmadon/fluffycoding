@@ -326,7 +326,7 @@ upstream credits and each model's individual license.
 
 ## License
 
-This plugin is released under the MIT License.
+This plugin is released under the GPL-3 License.
 
 Individual **rembg model weights** carry their own separate licenses —
 most are MIT or similarly permissive, but `bria-rmbg` (RMBG-2.0)
