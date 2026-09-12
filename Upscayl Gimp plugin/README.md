@@ -91,7 +91,3 @@ Developed by **[Zarir Madon](https://www.zarirmadon.com)**, together with **Clau
 ## License
 
 GPL-3.0, matching Upscayl's own CLI licensing terms.
-
-## Feedback
-
-Found a bug, or running a GIMP/Upscayl version this doesn't handle correctly? Open an issue with the exact error message and, if possible, what `pacman -Ql` / `dpkg -L` / your package manager's equivalent shows for your Upscayl install — that's usually enough to pin down a fix quickly.
