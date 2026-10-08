@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fluffy Coding by Zarir Madon | GIMP Plugins & Linux Scripts</title>
+
+  <!-- Google Fonts & Tailwind CSS CDN -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Marked.js for Markdown Rendering inside Modal -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            display: ['"Space Grotesk"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f3ff',
+              100: '#e0e7ff',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              purple: '#a855f7',
+              pink: '#ec4899',
+              cyan: '#06b6d4',
+              neonGreen: '#10b981',
+              darkBg: '#090d16',
+              cardBg: '#111827',
+              cardHover: '#1f2937',
+            }
+          },
+          animation: {
+            'glow-pulse': 'glowPulse 3s infinite alternate',
+            'float': 'float 6s ease-in-out infinite',
+          },
+          keyframes: {
+            glowPulse: {
+              '0%': { opacity: '0.3', transform: 'scale(1)' },
+              '100%': { opacity: '0.6', transform: 'scale(1.05)' }
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-8px)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #090d16;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1f2937;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #374151;
+    }
+
+    /* Glassmorphism effects */
+    .glass-panel {
+      background: rgba(17, 24, 39, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    
+    .glass-card {
+      background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%), rgba(17, 24, 39, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .glass-card:hover {
+      border-color: rgba(168, 85, 247, 0.4);
+      box-shadow: 0 10px 30px -10px rgba(168, 85, 247, 0.3);
+    }
+
+    /* Text Gradient */
+    .gradient-text {
+      background: linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #06b6d4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Markdown Modal Typography */
+    .markdown-body h1 { font-size: 1.6rem; font-weight: 800; margin-top: 1.25rem; margin-bottom: 0.75rem; color: #f3f4f6; border-bottom: 1px solid #374151; padding-bottom: 0.5rem; }
+    .markdown-body h2 { font-size: 1.3rem; font-weight: 700; margin-top: 1.25rem; margin-bottom: 0.5rem; color: #e5e7eb; }
+    .markdown-body h3 { font-size: 1.1rem; font-weight: 600; margin-top: 1rem; margin-bottom: 0.5rem; color: #c084fc; }
+    .markdown-body p { font-size: 0.925rem; line-height: 1.6; margin-bottom: 1rem; color: #d1d5db; }
+    .markdown-body ul, .markdown-body ol { margin-left: 1.5rem; margin-bottom: 1rem; color: #d1d5db; list-style-type: disc; }
+    .markdown-body code { background: #1f2937; padding: 0.2rem 0.4rem; border-radius: 0.375rem; font-size: 0.85rem; color: #38bdf8; font-family: monospace; }
+    .markdown-body pre { background: #0f172a; padding: 1rem; border-radius: 0.75rem; overflow-x: auto; margin-bottom: 1rem; border: 1px solid #1e293b; }
+    .markdown-body pre code { background: transparent; padding: 0; color: #f8fafc; }
+    .markdown-body a { color: #c084fc; text-decoration: underline; text-underline-offset: 2px; }
+    .markdown-body a:hover { color: #f472b6; }
+    .markdown-body blockquote { border-left: 4px solid #a855f7; padding-left: 1rem; margin-left: 0; color: #9ca3af; font-style: italic; }
+  </style>
+</head>
+
+<body class="bg-[#090d16] text-slate-100 font-sans antialiased selection:bg-purple-500 selection:text-white min-h-screen flex flex-col justify-between relative overflow-x-hidden">
+
+  <!-- Background Animated Glowing Orbs -->
+  <div class="fixed top-0 left-1/4 w-[500px] h-[500px] bg-purple-600/20 rounded-full blur-[140px] pointer-events-none animate-glow-pulse -z-10"></div>
+  <div class="fixed top-1/3 right-1/4 w-[400px] h-[400px] bg-cyan-600/15 rounded-full blur-[130px] pointer-events-none animate-glow-pulse -z-10" style="animation-delay: 1.5s;"></div>
+  <div class="fixed bottom-10 left-1/3 w-[600px] h-[600px] bg-pink-600/15 rounded-full blur-[160px] pointer-events-none animate-glow-pulse -z-10" style="animation-delay: 2.5s;"></div>
+
+  <header class="relative pt-12 pb-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center w-full">
+
+    <!-- Main Title -->
+    <h1 class="font-display text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight mb-4 leading-tight">
+      <span class="gradient-text">Fluffy Coding</span> 
+      <span class="block sm:inline text-white text-3xl sm:text-5xl lg:text-6xl font-light">by Zarir Madon</span>
+    </h1>
+
+    <div class="max-w-2xl mx-auto text-left sm:text-center mt-2 mb-10 space-y-6">
+      <div class="text-[11px] sm:text-xs tracking-[0.25em] font-bold text-orange-400/90 uppercase">Creative Software / Independent Workshop</div>
+      <h2 class="font-display text-5xl sm:text-7xl font-black tracking-tight text-white leading-[0.85] sm:leading-[0.85]">
+        Make<br/>
+        <span class="gradient-text">fluffy</span><br/>
+        things.
+      </h2>
+      <p class="text-slate-400 text-base sm:text-lg leading-relaxed max-w-xl mx-auto sm:mx-auto">
+        Small, useful and occasionally ridiculous tools for artists, photographers and curious people who like making computers do interesting things.
+      </p>
+      <div class="pt-2 border-t border-slate-800/50 max-w-xs mx-auto sm:mx-auto text-left sm:text-center">
+        <div class="text-xs font-bold tracking-widest text-white uppercase mt-4">Fluffy Coding</div>
+        <div class="text-xs text-slate-500 mt-1 leading-relaxed">An evolving collection of creative experiments, plugins and tools.</div>
+      </div>
+    </div>
+
+    <!-- Tech Pills -->
+    <div class="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 max-w-3xl mx-auto">
+      <span class="px-3 py-1 rounded-lg bg-slate-900/80 border border-slate-700/60 text-slate-300 text-xs sm:text-sm font-medium flex items-center gap-1.5">
+        <i class="fa-solid fa-paintbrush text-purple-400"></i> GIMP Plugins
+      </span>
+      <span class="px-3 py-1 rounded-lg bg-slate-900/80 border border-slate-700/60 text-slate-300 text-xs sm:text-sm font-medium flex items-center gap-1.5">
+        <i class="fa-solid fa-layer-group text-cyan-400"></i> GEGL Gallery
+      </span>
+      <span class="px-3 py-1 rounded-lg bg-slate-900/80 border border-slate-700/60 text-slate-300 text-xs sm:text-sm font-medium flex items-center gap-1.5">
+        <i class="fa-brands fa-python text-amber-400"></i> Python 3
+      </span>
+      <span class="px-3 py-1 rounded-lg bg-slate-900/80 border border-slate-700/60 text-slate-300 text-xs sm:text-sm font-medium flex items-center gap-1.5">
+        <i class="fa-solid fa-wand-magic-sparkles text-pink-400"></i> G'MIC Filters
+      </span>
+      <span class="px-3 py-1 rounded-lg bg-slate-900/80 border border-slate-700/60 text-slate-300 text-xs sm:text-sm font-medium flex items-center gap-1.5">
+        <i class="fa-brands fa-linux text-emerald-400"></i> Linux Automation
+      </span>
+    </div>
+
+    <!-- Quick Stats Bar -->
+    <div id="stats-bar" class="mt-8 max-w-xl mx-auto glass-panel rounded-2xl p-4 flex justify-around items-center divide-x divide-slate-800 border border-slate-800/80 shadow-2xl">
+      <div class="px-3 text-center">
+        <div id="stat-count" class="font-display text-2xl font-bold text-purple-400">--</div>
+        <div class="text-xs text-slate-400 font-medium uppercase tracking-wider">Repositories</div>
+      </div>
+      <div class="px-3 text-center">
+        <div class="font-display text-2xl font-bold text-cyan-400">Open</div>
+        <div class="text-xs text-slate-400 font-medium uppercase tracking-wider">Source</div>
+      </div>
+      <div class="px-3 text-center">
+        <a href="https://github.com/zarirmadon/fluffycoding" target="_blank" class="font-display text-xs sm:text-sm font-bold text-pink-400 hover:text-pink-300 flex items-center gap-1 justify-center transition-colors">
+          View GitHub Repo <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+        </a>
+        <div class="text-xs text-slate-400 font-medium uppercase tracking-wider">Main Branch</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 w-full flex-grow">
+    
+    <!-- Search / Header bar -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+      <div>
+        <h2 class="font-display text-2xl font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-cubes text-purple-400"></i> Plugins & Script Collection
+        </h2>
+        <p class="text-sm text-slate-400">Click any card to read documentation and download tool scripts.</p>
+      </div>
+
+      <!-- Search Input -->
+      <div class="relative w-full sm:w-72">
+        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
+        <input 
+          type="text" 
+          id="search-input" 
+          placeholder="Search plugins..." 
+          class="w-full bg-slate-900/90 text-sm text-slate-200 pl-10 pr-4 py-2 rounded-xl border border-slate-800 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all placeholder:text-slate-500"
+        >
+      </div>
+    </div>
+
+    <!-- Dynamic Plugin Cards Grid -->
+    <div id="plugin-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <!-- Skeleton Loaders -->
+      <div class="glass-card rounded-2xl overflow-hidden border border-slate-800 p-4 animate-pulse">
+        <div class="w-full h-36 bg-slate-800/60 rounded-xl mb-4"></div>
+        <div class="h-5 bg-slate-800/80 rounded w-3/4 mb-2"></div>
+        <div class="h-3 bg-slate-800/60 rounded w-full mb-1"></div>
+        <div class="h-3 bg-slate-800/60 rounded w-5/6 mb-4"></div>
+        <div class="h-8 bg-slate-800/80 rounded-lg w-full"></div>
+      </div>
+      <div class="glass-card rounded-2xl overflow-hidden border border-slate-800 p-4 animate-pulse">
+        <div class="w-full h-36 bg-slate-800/60 rounded-xl mb-4"></div>
+        <div class="h-5 bg-slate-800/80 rounded w-3/4 mb-2"></div>
+        <div class="h-3 bg-slate-800/60 rounded w-full mb-1"></div>
+        <div class="h-3 bg-slate-800/60 rounded w-5/6 mb-4"></div>
+        <div class="h-8 bg-slate-800/80 rounded-lg w-full"></div>
+      </div>
+      <div class="glass-card rounded-2xl overflow-hidden border border-slate-800 p-4 animate-pulse">
+        <div class="w-full h-36 bg-slate-800/60 rounded-xl mb-4"></div>
+        <div class="h-5 bg-slate-800/80 rounded w-3/4 mb-2"></div>
+        <div class="h-3 bg-slate-800/60 rounded w-full mb-1"></div>
+        <div class="h-3 bg-slate-800/60 rounded w-5/6 mb-4"></div>
+        <div class="h-8 bg-slate-800/80 rounded-lg w-full"></div>
+      </div>
+      <div class="glass-card rounded-2xl overflow-hidden border border-slate-800 p-4 animate-pulse">
+        <div class="w-full h-36 bg-slate-800/60 rounded-xl mb-4"></div>
+        <div class="h-5 bg-slate-800/80 rounded w-3/4 mb-2"></div>
+        <div class="h-3 bg-slate-800/60 rounded w-full mb-1"></div>
+        <div class="h-3 bg-slate-800/60 rounded w-5/6 mb-4"></div>
+        <div class="h-8 bg-slate-800/80 rounded-lg w-full"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="mt-16 border-t border-slate-800/80 bg-slate-950/80 backdrop-blur-md py-10 px-4 sm:px-6 lg:px-8 text-slate-400 text-sm w-full">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
+      <div>
+        <div class="font-display font-bold text-slate-200 text-lg mb-1 flex items-center justify-center md:justify-start gap-2">
+          <span class="gradient-text">Zarir Madon</span> • Fluffy Coding
+        </div>
+        <p class="text-xs text-slate-500 max-w-md">
+          Open-source repository of creative automation tools, color grading algorithms, and Linux enhancement scripts.
+        </p>
+      </div>
+
+      <div class="flex items-center gap-4 text-lg">
+        <a href="https://github.com/zarirmadon" target="_blank" class="w-10 h-10 rounded-xl glass-panel flex items-center justify-center text-slate-300 hover:text-purple-400 hover:border-purple-500/50 transition-all">
+          <i class="fa-brands fa-github"></i>
+        </a>
+        <a href="http://www.zarirmadon.com" target="_blank" class="w-10 h-10 rounded-xl glass-panel flex items-center justify-center text-slate-300 hover:text-cyan-400 hover:border-cyan-500/50 transition-all">
+          <i class="fa-solid fa-globe"></i>
+        </a>
+      </div>
+    </div>
+    
+    <div class="max-w-7xl mx-auto mt-8 pt-6 border-t border-slate-900 text-center text-xs text-slate-600">
+      © <span id="year"></span> Zarir Madon. Open source under GPL-3.0 License.
+    </div>
+  </footer>
+
+  <div id="modal-backdrop" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    
+    <div id="modal-container" class="glass-panel border border-slate-700/60 bg-[#0d1322] rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl scale-95 transition-transform duration-300 my-auto">
+      
+      <!-- Modal Header -->
+      <div class="p-5 sm:p-6 border-b border-slate-800 flex items-center justify-between bg-slate-900/60">
+        <div class="flex items-center gap-3">
+          <div id="modal-icon-container" class="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 text-lg">
+            <i class="fa-solid fa-folder-open"></i>
+          </div>
+          <div>
+            <h3 id="modal-title" class="font-display font-bold text-xl text-white">Plugin Documentation</h3>
+            <p id="modal-subtitle" class="text-xs text-slate-400 font-mono">zarirmadon/fluffycoding/...</p>
+          </div>
+        </div>
+
+        <button id="modal-close-btn" class="w-9 h-9 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-colors">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body (Scrollable) -->
+      <div class="p-6 overflow-y-auto space-y-6 flex-grow">
+        
+        <!-- Downloads Box (Primary Action) -->
+        <div class="glass-card rounded-xl p-5 border border-purple-500/20 bg-purple-950/10">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
+            <div>
+              <h4 class="font-display font-bold text-white text-base flex items-center gap-2">
+                <i class="fa-solid fa-download text-purple-400"></i> Download Plugin Files
+              </h4>
+              <p class="text-xs text-slate-400 mt-0.5">Includes Python scripts, documentation, and asset files.</p>
+            </div>
+
+            <a id="modal-zip-download" href="#" target="_blank" class="w-full sm:w-auto px-4 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-medium text-xs flex items-center justify-center gap-2 shadow-lg shadow-purple-900/40 transition-all">
+              <i class="fa-solid fa-file-zipper"></i> Download Repo (.zip)
+            </a>
+          </div>
+
+          <!-- Individual File Download Buttons Grid -->
+          <div class="border-t border-slate-800/80 pt-3">
+            <div class="text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wider">Available Files in Folder:</div>
+            <div id="modal-files-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto pr-1">
+              <!-- Dynamically Populated -->
+              <div class="text-xs text-slate-500 animate-pulse">Loading files...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Markdown README Container -->
+        <div>
+          <div class="text-xs font-semibold text-slate-400 mb-3 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-book-open text-cyan-400"></i> Documentation (README.md)
+          </div>
+          <div id="modal-readme-content" class="markdown-body bg-slate-900/50 p-6 rounded-2xl border border-slate-800 min-h-[150px]">
+            <!-- Rendered Markdown goes here -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 border-t border-slate-800 bg-slate-900/80 flex items-center justify-between text-xs text-slate-400">
+        <span class="flex items-center gap-1.5">
+          <i class="fa-solid fa-shield-halved text-emerald-400"></i> GPL-3.0 Licensed Code
+        </span>
+        <a id="modal-github-link" href="#" target="_blank" class="text-purple-400 hover:text-purple-300 flex items-center gap-1 hover:underline">
+          View on GitHub <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const GITHUB_USER = 'zarirmadon';
+    const GITHUB_REPO = 'fluffycoding';
+    const GITHUB_BRANCH = 'main';
+    const API_BASE = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents`;
+
+    let allPlugins = [];
+
+    // Fallback colorful gradient list for folders without preview images
+    const fallbackGradients = [
+      'from-purple-900/80 via-indigo-900/60 to-slate-900',
+      'from-pink-900/80 via-purple-900/60 to-slate-900',
+      'from-cyan-900/80 via-blue-900/60 to-slate-900',
+      'from-emerald-900/80 via-teal-900/60 to-slate-900',
+      'from-amber-900/80 via-orange-900/60 to-slate-900',
+    ];
+
+    // Select random visual icon for folders
+    function getPluginIcon(name) {
+      const lower = name.toLowerCase();
+      if (lower.includes('gimp') || lower.includes('paint') || lower.includes('color')) return 'fa-paintbrush text-purple-400';
+      if (lower.includes('gmic') || lower.includes('filter')) return 'fa-wand-magic-sparkles text-pink-400';
+      if (lower.includes('gegl') || lower.includes('gallery')) return 'fa-layer-group text-cyan-400';
+      if (lower.includes('meta') || lower.includes('select')) return 'fa-sliders text-emerald-400';
+      if (lower.includes('python') || lower.includes('script')) return 'fa-code text-amber-400';
+      return 'fa-cube text-indigo-400';
+    }
+
+    async function loadPlugins() {
+      const grid = document.getElementById('plugin-grid');
+      const statCount = document.getElementById('stat-count');
+
+      try {
+        const response = await fetch(API_BASE);
+        if (!response.ok) throw new Error(`GitHub API error: ${response.status}`);
+        
+        const contents = await response.json();
+        
+        // Filter out non-folder items
+        const folders = contents.filter(item => item.type === 'dir');
+        allPlugins = folders;
+
+        statCount.textContent = folders.length;
+
+        if (folders.length === 0) {
+          grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-500">No plugin folders found in repository.</div>`;
+          return;
+        }
+
+        renderGrid(folders);
+
+      } catch (err) {
+        console.error('Failed to load repository folders:', err);
+        grid.innerHTML = `
+          <div class="col-span-full text-center py-12 text-slate-400 glass-card rounded-2xl p-6">
+            <i class="fa-solid fa-triangle-exclamation text-amber-400 text-3xl mb-3"></i>
+            <h3 class="text-lg font-bold text-white mb-1">Could not load repository content</h3>
+            <p class="text-xs text-slate-500 mb-4">${err.message}</p>
+            <a href="https://github.com/${GITHUB_USER}/${GITHUB_REPO}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold">
+              Visit GitHub Directly <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+          </div>
+        `;
+      }
+    }
+
+    function renderGrid(folders) {
+      const grid = document.getElementById('plugin-grid');
+      grid.innerHTML = '';
+
+      folders.forEach((folder, index) => {
+        const gradient = fallbackGradients[index % fallbackGradients.length];
+        const iconClass = getPluginIcon(folder.name);
+
+        // Raw image URLs for potential previews
+        const previewPng = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${encodeURIComponent(folder.name)}/preview.png`;
+
+        const card = document.createElement('div');
+        card.className = 'glass-card rounded-2xl overflow-hidden border border-slate-800 hover:border-purple-500/40 transition-all duration-300 flex flex-col justify-between group cursor-pointer shadow-lg hover:-translate-y-1';
+        
+        card.onclick = () => openModal(folder);
+
+        card.innerHTML = `
+          <div>
+            <!-- Poster / Image Box -->
+            <div class="relative w-full h-36 bg-slate-900 overflow-hidden border-b border-slate-800">
+              <div class="absolute inset-0 bg-gradient-to-br ${gradient} opacity-90 group-hover:scale-105 transition-transform duration-500"></div>
+              
+              <!-- Try loading preview image if present -->
+              <img 
+                src="${previewPng}" 
+                alt="${folder.name}" 
+                class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300" 
+                onload="this.classList.remove('opacity-0')" 
+                onerror="this.style.display='none'"
+              />
+
+              <div class="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-slate-950/70 backdrop-blur-md border border-slate-700/60 text-[10px] font-mono text-purple-300 flex items-center gap-1.5">
+                <i class="fa-solid ${iconClass}"></i> Folder
+              </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="p-5">
+              <h3 class="font-display font-bold text-base text-white group-hover:text-purple-300 transition-colors line-clamp-1 mb-1.5">
+                ${folder.name}
+              </h3>
+              <p class="text-xs text-slate-400 leading-relaxed line-clamp-2">
+                GIMP & Linux utility module. Click to view full installation guide and download script files.
+              </p>
+            </div>
+          </div>
+
+          <!-- Card Action Button -->
+          <div class="px-5 pb-5 pt-0">
+            <button class="w-full py-2.5 rounded-xl bg-slate-900/90 hover:bg-purple-600/20 border border-slate-700/60 hover:border-purple-500/50 text-xs font-semibold text-purple-300 group-hover:text-white flex items-center justify-center gap-2 transition-all">
+              <span>View & Download</span>
+              <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
+            </button>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+    }
+
+    async function openModal(folder) {
+      const backdrop = document.getElementById('modal-backdrop');
+      const container = document.getElementById('modal-container');
+      const title = document.getElementById('modal-title');
+      const subtitle = document.getElementById('modal-subtitle');
+      const readmeContainer = document.getElementById('modal-readme-content');
+      const filesList = document.getElementById('modal-files-list');
+      const zipBtn = document.getElementById('modal-zip-download');
+      const githubLink = document.getElementById('modal-github-link');
+
+      title.textContent = folder.name;
+      subtitle.textContent = `zarirmadon/fluffycoding/tree/main/${folder.name}`;
+      
+      githubLink.href = folder.html_url;
+      zipBtn.href = `https://github.com/${GITHUB_USER}/${GITHUB_REPO}/archive/refs/heads/${GITHUB_BRANCH}.zip`;
+
+      readmeContainer.innerHTML = `<div class="text-xs text-slate-400 py-6 text-center animate-pulse"><i class="fa-solid fa-spinner fa-spin text-purple-400 mr-2"></i>Loading documentation (README.md)...</div>`;
+      filesList.innerHTML = `<div class="text-xs text-slate-400 py-2 col-span-full animate-pulse"><i class="fa-solid fa-spinner fa-spin text-purple-400 mr-2"></i>Fetching folder files...</div>`;
+
+      // Show modal
+      backdrop.classList.remove('hidden');
+      setTimeout(() => {
+        backdrop.classList.remove('opacity-0');
+        container.classList.remove('scale-95');
+        container.classList.add('scale-100');
+      }, 10);
+
+      try {
+        // Fetch folder contents
+        const folderRes = await fetch(`${API_BASE}/${encodeURIComponent(folder.name)}`);
+        if (!folderRes.ok) throw new Error('Failed to fetch folder contents');
+        const files = await folderRes.json();
+
+        // 1. Render Downloadable Files List (excluding preview.png/jpg)
+        const downloadableFiles = files.filter(f => {
+          const name = f.name.toLowerCase();
+          return f.type === 'file' && name !== 'preview.png' && name !== 'preview.jpg';
+        });
+
+        if (downloadableFiles.length === 0) {
+          filesList.innerHTML = `<div class="text-xs text-slate-500 py-1 col-span-full">No downloadable files found.</div>`;
+        } else {
+          filesList.innerHTML = '';
+          downloadableFiles.forEach(file => {
+            const fileItem = document.createElement('div');
+            fileItem.className = 'flex items-center justify-between p-2 rounded-lg bg-slate-900/80 border border-slate-800 text-xs text-slate-200';
+            
+            // Raw download link
+            const rawUrl = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${encodeURIComponent(folder.name)}/${encodeURIComponent(file.name)}`;
+
+            fileItem.innerHTML = `
+              <div class="flex items-center gap-2 overflow-hidden mr-2">
+                <i class="fa-regular fa-file-code text-cyan-400 shrink-0"></i>
+                <span class="truncate font-mono text-[11px]">${file.name}</span>
+              </div>
+              <a 
+                href="${rawUrl}" 
+                download="${file.name}" 
+                target="_blank"
+                class="px-2.5 py-1 rounded-md bg-purple-600/20 hover:bg-purple-600 border border-purple-500/40 text-purple-300 hover:text-white font-medium text-[10px] shrink-0 flex items-center gap-1 transition-all"
+              >
+                <i class="fa-solid fa-download"></i> Download
+              </a>
+            `;
+            filesList.appendChild(fileItem);
+          });
+        }
+
+        // 2. Fetch and Render README.md
+        const readmeFile = files.find(f => f.name.toLowerCase() === 'readme.md');
+
+        if (readmeFile) {
+          const rawReadmeUrl = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${encodeURIComponent(folder.name)}/${encodeURIComponent(readmeFile.name)}`;
+          const readmeRes = await fetch(rawReadmeUrl);
+          
+          if (readmeRes.ok) {
+            const markdownText = await readmeRes.text();
+            readmeContainer.innerHTML = marked.parse(markdownText);
+          } else {
+            readmeContainer.innerHTML = `<p class="text-slate-500 italic">Could not load README.md file content.</p>`;
+          }
+        } else {
+          readmeContainer.innerHTML = `
+            <div class="text-center py-6 text-slate-500">
+              <i class="fa-solid fa-circle-info text-slate-600 text-2xl mb-2"></i>
+              <p class="text-xs">No <code>README.md</code> documentation file was found in this folder.</p>
+            </div>
+          `;
+        }
+
+      } catch (err) {
+        console.error(err);
+        readmeContainer.innerHTML = `<p class="text-rose-400 text-xs">Error loading modal data: ${err.message}</p>`;
+      }
+    }
+
+    // Modal Close Logic
+    function closeModal() {
+      const backdrop = document.getElementById('modal-backdrop');
+      const container = document.getElementById('modal-container');
+
+      backdrop.classList.add('opacity-0');
+      container.classList.remove('scale-100');
+      container.classList.add('scale-95');
+
+      setTimeout(() => {
+        backdrop.classList.add('hidden');
+      }, 300);
+    }
+
+    document.getElementById('modal-close-btn').onclick = closeModal;
+    document.getElementById('modal-backdrop').onclick = (e) => {
+      if (e.target.id === 'modal-backdrop') closeModal();
+    };
+
+    document.getElementById('search-input').addEventListener('input', (e) => {
+      const term = e.target.value.toLowerCase().trim();
+      const filtered = allPlugins.filter(p => p.name.toLowerCase().includes(term));
+      renderGrid(filtered);
+    });
+
+    // Initialize on window load
+    window.onload = loadPlugins;
+  </script>
+</body>
+</html>
