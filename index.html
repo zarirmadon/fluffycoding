@@ -1,353 +1,52 @@
-<!DOCTYPE html>
-<html lang="en" class="dark scroll-smooth">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fluffy Coding by Zarir Madon | GIMP Plugins & Linux Scripts</title>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#e8ebff"><title>Fluffy Coding — creative code by Zarir Madon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script><script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
+<style>
+:root{--paper:#e8ebff;--ink:#12131a;--muted:#555867;--line:#cfcbea;--lime:#ffd52a;--nav:#12131a}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Space Grotesk',sans-serif}a{color:inherit;text-decoration:none}button,input{font:inherit}button{cursor:pointer}::selection{background:#f02f78;color:#111}
+.topbar{position:absolute;top:25px;left:50%;transform:translateX(-50%);z-index:30;display:flex;align-items:center;gap:24px;padding:10px 10px 10px 22px;border-radius:100px;background:rgba(28,35,31,.88);color:#fff;box-shadow:0 18px 50px #100c2732;backdrop-filter:blur(20px);white-space:nowrap}.logo{font-family:'Unbounded',sans-serif;font-weight:800;letter-spacing:-.075em;font-size:20px}.logo i{font-style:normal;color:var(--lime)}.toplinks{display:flex;gap:25px;align-items:center}.toplinks a{font-size:10px;font-weight:700;letter-spacing:.08em}.toplinks a:hover{color:var(--lime)}.nav-contact{background:var(--lime);color:#12131a;font-size:11px;font-weight:800;padding:13px 19px;border-radius:100px}
+.hero{min-height:830px;min-height:95svh;position:relative;overflow:hidden;color:#f8faf5;background:#12131a;display:flex;flex-direction:column;justify-content:flex-end}.hero::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#191233dc 0%,#3a245faa 48%,#315cf54f 100%),radial-gradient(ellipse at 78% 38%,#f02f78 0%,#8a3ffc 23%,#315cf5 48%,transparent 72%),radial-gradient(ellipse at 90% 85%,#ff6a2a,transparent 49%);filter:saturate(.77)}.hero::after{content:'';position:absolute;width:70vw;height:70vw;max-width:980px;max-height:980px;right:-12vw;top:1%;border:1px solid #d5bcff77;border-radius:50%;box-shadow:0 0 0 60px #d5bcff0b,0 0 0 130px #d5bcff0a,0 0 0 240px #d5bcff09;transform:rotate(-20deg)}.hero-inner{position:relative;z-index:2;padding:160px max(7vw,25px) 8vh;max-width:1700px;width:100%;margin:auto;display:flex;flex-direction:column;align-items:flex-start}.eyebrow{font-weight:800;font-size:11px;letter-spacing:.26em}.hero-title{font:800 clamp(88px,16vw,260px)/.83 'Unbounded',sans-serif;letter-spacing:-.115em;margin:35px 0 42px;text-transform:lowercase}.hero-title span{display:block}.hero-title .second{color:#ff86ba;margin-left:7vw}.hero-bottom{width:100%;display:flex;gap:40px;align-items:end;justify-content:space-between}.hero-copy{font-size:clamp(17px,2vw,24px);line-height:1.5;max-width:520px;font-weight:500}.round-arrow{display:grid;place-items:center;flex-shrink:0;width:94px;height:94px;border-radius:50%;border:1px solid #fffaf1a0;font-size:39px;transition:background .2s,transform .2s}.round-arrow:hover{background:#fff2;transform:translateY(6px)}.hero-edge{position:absolute;right:7%;top:52%;z-index:2;writing-mode:vertical-rl;font-size:10px;font-weight:800;letter-spacing:.23em;color:#f8f0ffb8}
+.intro{padding:120px 7vw 115px;display:grid;grid-template-columns:1fr 1.1fr;gap:8vw;max-width:1800px;margin:auto}.section-id{font-size:11px;letter-spacing:.2em;font-weight:800;color:#68618c}.intro h2{font:800 clamp(55px,6vw,105px)/.98 'Unbounded',sans-serif;letter-spacing:-.085em;margin:30px 0}.intro h2 em{font-style:normal;color:#f02f78}.intro p{font-size:clamp(18px,2.1vw,29px);line-height:1.43;max-width:670px;margin:100px 0 0}.intro p strong{font-weight:800}
+.collection{background:#fffdf8;padding:100px 6vw 135px;border-radius:45px 45px 0 0}.collection-head{display:flex;align-items:end;justify-content:space-between;gap:30px;max-width:1600px;margin:0 auto 40px}.collection h2{font:800 clamp(52px,7vw,105px)/.95 'Unbounded',sans-serif;letter-spacing:-.09em;margin:17px 0}.collection h2 span{font-weight:400;color:#8a3ffc}.filters{min-width:260px;display:flex;flex-direction:column;gap:12px}.filters label{font-size:10px;letter-spacing:.15em;font-weight:800}.filters input{width:100%;border:0;border-bottom:1px solid #ac9fbf;background:transparent;padding:15px 2px;outline:none;border-radius:0;font-size:15px}.filters input:focus{border-color:#315cf5}.collection-strip{max-width:1600px;margin:0 auto 42px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;padding:17px 0;font-weight:800;font-size:10px;letter-spacing:.15em}.collection-strip b{font-size:14px;letter-spacing:0}.projects{max-width:1600px;margin:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:65px 30px}.project{min-width:0;cursor:pointer;outline:none}.project:focus-visible .project-art{outline:4px solid #f02f78}.project.feature:first-child{grid-column:1/-1;display:grid;grid-template-columns:1.13fr .87fr;gap:4vw;align-items:center;margin-bottom:45px}.project.feature:nth-child(2){grid-column:1/-1;display:grid;grid-template-columns:.85fr 1.15fr;gap:4vw;align-items:center;margin-bottom:45px}.project.feature:nth-child(2) .project-art{order:2}.project-art{position:relative;height:clamp(265px,31vw,480px);border-radius:25px;overflow:hidden;background:#281e49;isolation:isolate}.project.feature .project-art{height:clamp(420px,52vw,700px);border-radius:35px}.project-art::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 70% 30%,#ff6a2aab,transparent 37%),linear-gradient(138deg,#8a3ffc,#211246);z-index:-1}.project-art.art-1::before{background:radial-gradient(circle at 27% 54%,#edc9b19c,transparent 42%),linear-gradient(140deg,#282046,#f02f78)}.project-art.art-2::before{background:radial-gradient(circle at 75% 17%,#ffd52a,transparent 42%),linear-gradient(135deg,#8a3ffc,#315cf5)}.project-art.art-3::before{background:radial-gradient(circle at 22% 65%,#d5adff,transparent 44%),linear-gradient(160deg,#6740c9,#19153e)}.project-art.art-4::before{background:radial-gradient(circle at 76% 55%,#ffc18a,transparent 37%),linear-gradient(130deg,#c658c1,#413475)}.project-art img{position:absolute;width:100%;height:100%;object-fit:cover;inset:0;z-index:1;transition:transform .6s}.project:hover .project-art img{transform:scale(1.05)}.art-monogram{position:absolute;inset:0;display:grid;place-items:center;font:800 clamp(200px,25vw,500px)/1 'Unbounded',sans-serif;letter-spacing:-.15em;color:#fffdf843;transform:rotate(-12deg);pointer-events:none}.art-label{position:absolute;bottom:25px;left:25px;color:white;font-size:10px;font-weight:800;letter-spacing:.18em;z-index:2}.art-corner{position:absolute;right:23px;top:22px;display:grid;place-items:center;border-radius:50%;background:#ffffffdc;width:48px;height:48px;color:#12131a;font-size:25px;z-index:2;transition:transform .2s}.project:hover .art-corner{transform:rotate(45deg)}.project-info{padding:25px 5px 5px}.project.feature .project-info{padding:30px 0}.project-meta{display:flex;gap:20px;justify-content:space-between;font-size:10px;letter-spacing:.12em;color:#706885;font-weight:800}.project h3{font:800 clamp(30px,3.6vw,60px)/1.06 'Unbounded',sans-serif;letter-spacing:-.07em;margin:23px 0 17px;overflow-wrap:anywhere;text-transform:capitalize}.project.feature h3{font-size:clamp(55px,6.8vw,110px)}.project p{font-size:15px;color:#555867;line-height:1.6;max-width:530px}.project.feature p{font-size:19px}.project-bottom{display:flex;gap:15px;justify-content:space-between;align-items:center;border-top:1px solid #d7cfea;padding-top:18px;margin-top:28px;font-size:11px;color:#68618c}.project-bottom strong{color:#12131a;font-size:11px;letter-spacing:.05em}.project-bottom strong span{font-size:17px}.projects>.status{grid-column:1/-1;padding:35px 0;color:#555867}
+.closing{background:#171326;color:#fffdf8;padding:95px 7vw 45px}.closing-head{font:800 clamp(66px,10vw,165px)/.9 'Unbounded',sans-serif;letter-spacing:-.09em;margin:0 0 90px}.closing-head span{color:#ff86ba}.closing-links{border-top:1px solid #8980a47a;padding:35px 0;display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap}.closing-links a{font-size:12px;font-weight:800;letter-spacing:.12em}.closing-links a:hover{color:var(--lime)}.closing-bottom{display:flex;justify-content:space-between;gap:25px;color:#bdb3d3;font-size:11px}
+.overlay{position:fixed;inset:0;z-index:100;background:#100c27cc;backdrop-filter:blur(18px);display:flex;align-items:center;justify-content:center;padding:25px;opacity:1;transition:opacity .25s}.overlay.hidden{display:none}.overlay.opacity-0{opacity:0}.sheet{width:min(1160px,100%);height:min(92vh,960px);background:#fffdf8;border-radius:38px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 35px 110px #0008;transform:scale(1);transition:transform .25s}.sheet.scale-95{transform:scale(.97)}.sheet-head{padding:33px 40px;display:flex;justify-content:space-between;gap:25px;background:#eee5ff;align-items:start}.sheet-kicker{font-size:10px;font-weight:800;letter-spacing:.16em}.sheet-head h3{font:800 clamp(35px,5vw,63px)/1 'Unbounded',sans-serif;letter-spacing:-.075em;margin:13px 0;overflow-wrap:anywhere}.sheet-head p{font-size:12px;color:#68618c;margin:0}.close{border:0;background:#12131a;color:white;border-radius:50%;width:48px;height:48px;flex-shrink:0;font-size:23px}.sheet-body{overflow:auto;padding:40px;display:grid;grid-template-columns:minmax(260px,.72fr) minmax(0,1.28fr);gap:35px}.sheet-body h4{font-size:11px;letter-spacing:.14em;margin:0 0 20px}.download-panel{background:#f3edff;border-radius:26px;padding:28px;align-self:start}.download-panel .repo-download{display:block;padding:16px 19px;border-radius:100px;background:#315cf5;color:white;text-align:center;font-size:12px;font-weight:800;margin:18px 0 25px}.file-list{display:grid;gap:8px;max-height:360px;overflow:auto}.file-list>div{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#fff;border-radius:12px;padding:11px 12px;font-size:12px}.file-list span{overflow:hidden;text-overflow:ellipsis}.file-list a{background:#d2e3c9;border-radius:50px;padding:9px 13px;font-size:11px;font-weight:800}.readme-panel{min-width:0}.markdown-body{color:#37453b;font-size:14px;line-height:1.7;overflow-wrap:anywhere}.markdown-body h1,.markdown-body h2,.markdown-body h3{color:#1b2b23;font-family:'Unbounded',sans-serif;letter-spacing:-.05em}.markdown-body pre{background:#1b2923;color:#ecf7e9;padding:18px;border-radius:15px;overflow:auto}.markdown-body code{overflow-wrap:anywhere}.markdown-body a{text-decoration:underline}.sheet-foot{border-top:1px solid #d1d9cd;background:#fffdf8;padding:17px 40px;display:flex;justify-content:space-between;gap:15px;font-size:11px;color:#706885}.sheet-foot a{font-weight:800;color:#f02f78}
+@media(max-width:900px){.topbar{width:calc(100% - 30px);justify-content:space-between;gap:10px}.toplinks{gap:12px}.toplinks a:not(:first-child){display:none}.hero{min-height:750px}.hero-title{font-size:clamp(82px,17vw,160px)}.intro{grid-template-columns:1fr;padding:85px 6vw;gap:0}.intro p{margin:0}.project.feature:first-child,.project.feature:nth-child(2){grid-template-columns:1fr;gap:20px}.project.feature:nth-child(2) .project-art{order:0}.project.feature .project-art{height:420px}.project.feature h3{font-size:clamp(45px,8vw,90px)}}
+@media(max-width:640px){.topbar{top:14px;padding:8px 8px 8px 14px}.logo{font-size:18px}.nav-contact{padding:12px;font-size:10px}.hero{min-height:710px;min-height:94svh}.hero-inner{padding:140px 23px 55px}.hero-title{font-size:clamp(80px,17vw,119px);margin:35px 0}.hero-title .second{margin-left:0}.hero-bottom{gap:15px}.hero-copy{font-size:16px}.round-arrow{width:60px;height:60px;font-size:30px}.hero-edge{display:none}.collection{border-radius:24px 24px 0 0;padding:73px 20px 95px}.collection-head{display:block}.filters{margin:35px 0 0}.collection h2{font-size:57px}.collection-strip{font-size:9px}.projects{grid-template-columns:1fr;gap:48px}.project.feature:first-child,.project.feature:nth-child(2){grid-column:auto;margin-bottom:0}.project-art,.project.feature .project-art{height:340px;border-radius:22px}.project.feature h3{font-size:50px}.project h3{font-size:34px}.project-meta span:last-child{display:none}.intro h2{font-size:55px}.intro p{font-size:18px}.closing{padding:70px 23px 35px}.closing-head{margin-bottom:60px}.closing-bottom{flex-direction:column}.overlay{padding:10px}.sheet{height:95vh;border-radius:25px}.sheet-head{padding:24px}.sheet-body{display:block;padding:22px;overflow:auto}.readme-panel{margin-top:32px}.sheet-foot{padding:16px 22px}.sheet-head h3{font-size:37px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 
-  <!-- Google Fonts & Tailwind CSS CDN -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- Marked.js for Markdown Rendering inside Modal -->
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
-
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-            display: ['"Space Grotesk"', 'sans-serif'],
-          },
-          colors: {
-            brand: {
-              50: '#f0f3ff',
-              100: '#e0e7ff',
-              400: '#818cf8',
-              500: '#6366f1',
-              600: '#4f46e5',
-              700: '#4338ca',
-              purple: '#a855f7',
-              pink: '#ec4899',
-              cyan: '#06b6d4',
-              neonGreen: '#10b981',
-              darkBg: '#090d16',
-              cardBg: '#111827',
-              cardHover: '#1f2937',
-            }
-          },
-          animation: {
-            'glow-pulse': 'glowPulse 3s infinite alternate',
-            'float': 'float 6s ease-in-out infinite',
-          },
-          keyframes: {
-            glowPulse: {
-              '0%': { opacity: '0.3', transform: 'scale(1)' },
-              '100%': { opacity: '0.6', transform: 'scale(1.05)' }
-            },
-            float: {
-              '0%, 100%': { transform: 'translateY(0px)' },
-              '50%': { transform: 'translateY(-8px)' }
-            }
-          }
-        }
-      }
-    }
-  </script>
-
-  <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-  <style>
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #090d16;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #1f2937;
-      border-radius: 4px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #374151;
-    }
-
-    /* Glassmorphism effects */
-    .glass-panel {
-      background: rgba(17, 24, 39, 0.75);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-    
-    .glass-card {
-      background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%), rgba(17, 24, 39, 0.85);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.07);
-    }
-
-    .glass-card:hover {
-      border-color: rgba(168, 85, 247, 0.4);
-      box-shadow: 0 10px 30px -10px rgba(168, 85, 247, 0.3);
-    }
-
-    /* Text Gradient */
-    .gradient-text {
-      background: linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #06b6d4 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    /* Markdown Modal Typography */
-    .markdown-body h1 { font-size: 1.6rem; font-weight: 800; margin-top: 1.25rem; margin-bottom: 0.75rem; color: #f3f4f6; border-bottom: 1px solid #374151; padding-bottom: 0.5rem; }
-    .markdown-body h2 { font-size: 1.3rem; font-weight: 700; margin-top: 1.25rem; margin-bottom: 0.5rem; color: #e5e7eb; }
-    .markdown-body h3 { font-size: 1.1rem; font-weight: 600; margin-top: 1rem; margin-bottom: 0.5rem; color: #c084fc; }
-    .markdown-body p { font-size: 0.925rem; line-height: 1.6; margin-bottom: 1rem; color: #d1d5db; }
-    .markdown-body ul, .markdown-body ol { margin-left: 1.5rem; margin-bottom: 1rem; color: #d1d5db; list-style-type: disc; }
-    .markdown-body code { background: #1f2937; padding: 0.2rem 0.4rem; border-radius: 0.375rem; font-size: 0.85rem; color: #38bdf8; font-family: monospace; }
-    .markdown-body pre { background: #0f172a; padding: 1rem; border-radius: 0.75rem; overflow-x: auto; margin-bottom: 1rem; border: 1px solid #1e293b; }
-    .markdown-body pre code { background: transparent; padding: 0; color: #f8fafc; }
-    .markdown-body a { color: #c084fc; text-decoration: underline; text-underline-offset: 2px; }
-    .markdown-body a:hover { color: #f472b6; }
-    .markdown-body blockquote { border-left: 4px solid #a855f7; padding-left: 1rem; margin-left: 0; color: #9ca3af; font-style: italic; }
-  </style>
-</head>
-
-<body class="bg-[#090d16] text-slate-100 font-sans antialiased selection:bg-purple-500 selection:text-white min-h-screen flex flex-col justify-between relative overflow-x-hidden">
-
-  <!-- Background Animated Glowing Orbs -->
-  <div class="fixed top-0 left-1/4 w-[500px] h-[500px] bg-purple-600/20 rounded-full blur-[140px] pointer-events-none animate-glow-pulse -z-10"></div>
-  <div class="fixed top-1/3 right-1/4 w-[400px] h-[400px] bg-cyan-600/15 rounded-full blur-[130px] pointer-events-none animate-glow-pulse -z-10" style="animation-delay: 1.5s;"></div>
-  <div class="fixed bottom-10 left-1/3 w-[600px] h-[600px] bg-pink-600/15 rounded-full blur-[160px] pointer-events-none animate-glow-pulse -z-10" style="animation-delay: 2.5s;"></div>
-
-  <header class="relative pt-12 pb-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center w-full">
-
-    <!-- Main Title -->
-    <h1 class="font-display text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight mb-4 leading-tight">
-      <span class="gradient-text">Fluffy Coding</span> 
-      <span class="block sm:inline text-white text-3xl sm:text-5xl lg:text-6xl font-light">by Zarir Madon</span>
-    </h1>
-
-    <div class="max-w-2xl mx-auto text-left sm:text-center mt-2 mb-10 space-y-6">
-      <div class="text-[11px] sm:text-xs tracking-[0.25em] font-bold text-orange-400/90 uppercase">Creative Software / Independent Workshop</div>
-      <h2 class="font-display text-5xl sm:text-7xl font-black tracking-tight text-white leading-[0.85] sm:leading-[0.85]">
-        Make<br/>
-        <span class="gradient-text">fluffy</span><br/>
-        things.
-      </h2>
-      <p class="text-slate-400 text-base sm:text-lg leading-relaxed max-w-xl mx-auto sm:mx-auto">
-        Small, useful and occasionally ridiculous tools for artists, photographers and curious people who like making computers do interesting things.
-      </p>
-      <div class="pt-2 border-t border-slate-800/50 max-w-xs mx-auto sm:mx-auto text-left sm:text-center">
-        <div class="text-xs font-bold tracking-widest text-white uppercase mt-4">Fluffy Coding</div>
-        <div class="text-xs text-slate-500 mt-1 leading-relaxed">An evolving collection of creative experiments, plugins and tools.</div>
-      </div>
-    </div>
-
-    <!-- Tech Pills -->
-    <div class="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 max-w-3xl mx-auto">
-      <span class="px-3 py-1 rounded-lg bg-slate-900/80 border border-slate-700/60 text-slate-300 text-xs sm:text-sm font-medium flex items-center gap-1.5">
-        <i class="fa-solid fa-paintbrush text-purple-400"></i> GIMP Plugins
-      </span>
-      <span class="px-3 py-1 rounded-lg bg-slate-900/80 border border-slate-700/60 text-slate-300 text-xs sm:text-sm font-medium flex items-center gap-1.5">
-        <i class="fa-solid fa-layer-group text-cyan-400"></i> GEGL Gallery
-      </span>
-      <span class="px-3 py-1 rounded-lg bg-slate-900/80 border border-slate-700/60 text-slate-300 text-xs sm:text-sm font-medium flex items-center gap-1.5">
-        <i class="fa-brands fa-python text-amber-400"></i> Python 3
-      </span>
-      <span class="px-3 py-1 rounded-lg bg-slate-900/80 border border-slate-700/60 text-slate-300 text-xs sm:text-sm font-medium flex items-center gap-1.5">
-        <i class="fa-solid fa-wand-magic-sparkles text-pink-400"></i> G'MIC Filters
-      </span>
-      <span class="px-3 py-1 rounded-lg bg-slate-900/80 border border-slate-700/60 text-slate-300 text-xs sm:text-sm font-medium flex items-center gap-1.5">
-        <i class="fa-brands fa-linux text-emerald-400"></i> Linux Automation
-      </span>
-    </div>
-
-    <!-- Quick Stats Bar -->
-    <div id="stats-bar" class="mt-8 max-w-xl mx-auto glass-panel rounded-2xl p-4 flex justify-around items-center divide-x divide-slate-800 border border-slate-800/80 shadow-2xl">
-      <div class="px-3 text-center">
-        <div id="stat-count" class="font-display text-2xl font-bold text-purple-400">--</div>
-        <div class="text-xs text-slate-400 font-medium uppercase tracking-wider">Indexed Folders</div>
-      </div>
-      <div class="px-3 text-center">
-        <div class="font-display text-2xl font-bold text-cyan-400">Open</div>
-        <div class="text-xs text-slate-400 font-medium uppercase tracking-wider">Source</div>
-      </div>
-      <div class="px-3 text-center">
-        <a href="https://github.com/zarirmadon" target="_blank" class="font-display text-xs sm:text-sm font-bold text-pink-400 hover:text-pink-300 flex items-center gap-1 justify-center transition-colors">
-          GitHub Profile <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
-        </a>
-        <div class="text-xs text-slate-400 font-medium uppercase tracking-wider">Public Repositories</div>
-      </div>
-    </div>
-  </header>
-
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 w-full flex-grow">
-    
-    <!-- Search / Header bar -->
-    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
-      <div>
-        <h2 class="font-display text-2xl font-bold text-white flex items-center gap-2">
-          <i class="fa-solid fa-cubes text-purple-400"></i> Plugins & Script Collection
-        </h2>
-        <p class="text-sm text-slate-400">Click any card to read documentation and download tool scripts.</p>
-      </div>
-
-      <!-- Search Input -->
-      <div class="relative w-full sm:w-72">
-        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
-        <input 
-          type="text" 
-          id="search-input" 
-          placeholder="Search plugins..." 
-          class="w-full bg-slate-900/90 text-sm text-slate-200 pl-10 pr-4 py-2 rounded-xl border border-slate-800 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all placeholder:text-slate-500"
-        >
-      </div>
-    </div>
-
-    <!-- Dynamic Plugin Cards Grid -->
-    <div id="plugin-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      <!-- Skeleton Loaders -->
-      <div class="glass-card rounded-2xl overflow-hidden border border-slate-800 p-4 animate-pulse">
-        <div class="w-full h-36 bg-slate-800/60 rounded-xl mb-4"></div>
-        <div class="h-5 bg-slate-800/80 rounded w-3/4 mb-2"></div>
-        <div class="h-3 bg-slate-800/60 rounded w-full mb-1"></div>
-        <div class="h-3 bg-slate-800/60 rounded w-5/6 mb-4"></div>
-        <div class="h-8 bg-slate-800/80 rounded-lg w-full"></div>
-      </div>
-      <div class="glass-card rounded-2xl overflow-hidden border border-slate-800 p-4 animate-pulse">
-        <div class="w-full h-36 bg-slate-800/60 rounded-xl mb-4"></div>
-        <div class="h-5 bg-slate-800/80 rounded w-3/4 mb-2"></div>
-        <div class="h-3 bg-slate-800/60 rounded w-full mb-1"></div>
-        <div class="h-3 bg-slate-800/60 rounded w-5/6 mb-4"></div>
-        <div class="h-8 bg-slate-800/80 rounded-lg w-full"></div>
-      </div>
-      <div class="glass-card rounded-2xl overflow-hidden border border-slate-800 p-4 animate-pulse">
-        <div class="w-full h-36 bg-slate-800/60 rounded-xl mb-4"></div>
-        <div class="h-5 bg-slate-800/80 rounded w-3/4 mb-2"></div>
-        <div class="h-3 bg-slate-800/60 rounded w-full mb-1"></div>
-        <div class="h-3 bg-slate-800/60 rounded w-5/6 mb-4"></div>
-        <div class="h-8 bg-slate-800/80 rounded-lg w-full"></div>
-      </div>
-      <div class="glass-card rounded-2xl overflow-hidden border border-slate-800 p-4 animate-pulse">
-        <div class="w-full h-36 bg-slate-800/60 rounded-xl mb-4"></div>
-        <div class="h-5 bg-slate-800/80 rounded w-3/4 mb-2"></div>
-        <div class="h-3 bg-slate-800/60 rounded w-full mb-1"></div>
-        <div class="h-3 bg-slate-800/60 rounded w-5/6 mb-4"></div>
-        <div class="h-8 bg-slate-800/80 rounded-lg w-full"></div>
-      </div>
-    </div>
-  </main>
-
-  <footer class="mt-16 border-t border-slate-800/80 bg-slate-950/80 backdrop-blur-md py-10 px-4 sm:px-6 lg:px-8 text-slate-400 text-sm w-full">
-    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
-      <div>
-        <div class="font-display font-bold text-slate-200 text-lg mb-1 flex items-center justify-center md:justify-start gap-2">
-          <span class="gradient-text">Zarir Madon</span> • Fluffy Coding
-        </div>
-        <p class="text-xs text-slate-500 max-w-md">
-          A public index of creative automation tools, image-processing plugins, filters and Linux scripts.
-        </p>
-      </div>
-
-      <div class="flex items-center gap-4 text-lg">
-        <a href="https://github.com/zarirmadon" target="_blank" class="w-10 h-10 rounded-xl glass-panel flex items-center justify-center text-slate-300 hover:text-purple-400 hover:border-purple-500/50 transition-all">
-          <i class="fa-brands fa-github"></i>
-        </a>
-        <a href="http://www.zarirmadon.com" target="_blank" class="w-10 h-10 rounded-xl glass-panel flex items-center justify-center text-slate-300 hover:text-cyan-400 hover:border-cyan-500/50 transition-all">
-          <i class="fa-solid fa-globe"></i>
-        </a>
-      </div>
-    </div>
-    
-    <div class="max-w-7xl mx-auto mt-8 pt-6 border-t border-slate-900 text-center text-xs text-slate-600">
-      © <span id="year"></span> Zarir Madon. Individual projects retain their own licences.
-    </div>
-  </footer>
-
-  <div id="modal-backdrop" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
-    
-    <div id="modal-container" class="glass-panel border border-slate-700/60 bg-[#0d1322] rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl scale-95 transition-transform duration-300 my-auto">
-      
-      <!-- Modal Header -->
-      <div class="p-5 sm:p-6 border-b border-slate-800 flex items-center justify-between bg-slate-900/60">
-        <div class="flex items-center gap-3">
-          <div id="modal-icon-container" class="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 text-lg">
-            <i class="fa-solid fa-folder-open"></i>
-          </div>
-          <div>
-            <h3 id="modal-title" class="font-display font-bold text-xl text-white">Plugin Documentation</h3>
-            <p id="modal-subtitle" class="text-xs text-slate-400 font-mono">zarirmadon/fluffycoding/...</p>
-          </div>
-        </div>
-
-        <button id="modal-close-btn" class="w-9 h-9 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-colors">
-          <i class="fa-solid fa-xmark text-lg"></i>
-        </button>
-      </div>
-
-      <!-- Modal Body (Scrollable) -->
-      <div class="p-6 overflow-y-auto space-y-6 flex-grow">
-        
-        <!-- Downloads Box (Primary Action) -->
-        <div class="glass-card rounded-xl p-5 border border-purple-500/20 bg-purple-950/10">
-          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
-            <div>
-              <h4 class="font-display font-bold text-white text-base flex items-center gap-2">
-                <i class="fa-solid fa-download text-purple-400"></i> Download Plugin Files
-              </h4>
-              <p class="text-xs text-slate-400 mt-0.5">Files belonging to this project folder.</p>
-            </div>
-
-            <a id="modal-zip-download" href="#" target="_blank" class="w-full sm:w-auto px-4 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-medium text-xs flex items-center justify-center gap-2 shadow-lg shadow-purple-900/40 transition-all">
-              <i class="fa-solid fa-file-zipper"></i> Download Repository (.zip)
-            </a>
-          </div>
-
-          <!-- Individual File Download Buttons Grid -->
-          <div class="border-t border-slate-800/80 pt-3">
-            <div class="text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wider">Available Files in Folder:</div>
-            <div id="modal-files-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto pr-1">
-              <!-- Dynamically Populated -->
-              <div class="text-xs text-slate-500 animate-pulse">Loading files...</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Markdown README Container -->
-        <div>
-          <div class="text-xs font-semibold text-slate-400 mb-3 uppercase tracking-wider flex items-center gap-2">
-            <i class="fa-solid fa-book-open text-cyan-400"></i> Documentation (README.md)
-          </div>
-          <div id="modal-readme-content" class="markdown-body bg-slate-900/50 p-6 rounded-2xl border border-slate-800 min-h-[150px]">
-            <!-- Rendered Markdown goes here -->
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Modal Footer -->
-      <div class="p-4 border-t border-slate-800 bg-slate-900/80 flex items-center justify-between text-xs text-slate-400">
-        <span class="flex items-center gap-1.5">
-          <i class="fa-solid fa-shield-halved text-emerald-400"></i> Check each project’s licence
-        </span>
-        <a id="modal-github-link" href="#" target="_blank" class="text-purple-400 hover:text-purple-300 flex items-center gap-1 hover:underline">
-          View on GitHub <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
-        </a>
-      </div>
-
-    </div>
-  </div>
-
-  <script>
+/* Visual identity derived from the supplied zarirmadon.com source. */
+:root{--paper:#e8ebff;--ink:#12131a;--muted:#555867;--line:#d5cce8;--lime:#f02f78;--nav:#12131a;--pink:#f02f78;--orange:#ff6a2a;--yellow:#ffd52a;--blue:#315cf5;--violet:#8a3ffc}
+body{background:linear-gradient(135deg,#f5efff 0%,#e7f4ff 52%,#f5f0ff 100%)}
+.topbar{background:rgba(18,19,26,.91);box-shadow:0 20px 60px #140b3955}
+.logo{letter-spacing:-.07em;font-size:18px}.logo i{color:var(--pink)}.nav-contact{background:linear-gradient(110deg,var(--pink),var(--violet));color:#fff}.toplinks a:hover{color:var(--yellow)}
+.hero{background:#151127;color:#fffdf8}
+.hero::before{background:radial-gradient(ellipse at 76% 29%,#8a3ffcbd,transparent 44%),radial-gradient(ellipse at 93% 85%,#f02f7899,transparent 45%),linear-gradient(115deg,#12131a 0%,#241344 58%,#315cf5 140%);filter:none}
+.hero::after{border-color:#ff86ba8a;box-shadow:0 0 0 60px #f02f780a,0 0 0 130px #8a3ffc12,0 0 0 240px #315cf50d}
+.hero-title{letter-spacing:-.09em;font-weight:900}.hero-title .second{font-family:'Instrument Serif',serif;font-weight:400;font-style:italic;letter-spacing:-.04em;color:#ff86ba}
+.hero-title span:first-child{letter-spacing:.012em} /* tiny visible separation between the letters of fluffy */
+.round-arrow{background:linear-gradient(135deg,var(--pink),var(--orange));border:0;color:white}.round-arrow:hover{background:var(--violet)}
+.intro{background:transparent}.intro h2 em{font-family:'Instrument Serif',serif;font-weight:400;letter-spacing:-.025em;color:var(--pink)}
+.collection{background:#fffdf8}.collection h2 span{font-family:'Instrument Serif',serif;font-style:italic;color:var(--violet)}
+.filters input:focus{border-color:var(--pink)}
+.project:focus-visible .project-art{outline-color:var(--pink)}
+.project-art{background:#211b40;box-shadow:0 15px 45px #1b153422}
+.project-art::before{background:radial-gradient(circle at 68% 30%,#f02f78,transparent 44%),linear-gradient(135deg,#315cf5,#8a3ffc)}
+.project-art.art-1::before{background:radial-gradient(circle at 27% 54%,#ff6a2a,transparent 42%),linear-gradient(140deg,#8a3ffc,#f02f78)}
+.project-art.art-2::before{background:radial-gradient(circle at 75% 17%,#ffd52a,transparent 42%),linear-gradient(135deg,#315cf5,#8a3ffc)}
+.project-art.art-3::before{background:radial-gradient(circle at 22% 65%,#f02f78,transparent 44%),linear-gradient(160deg,#315cf5,#211246)}
+.project-art.art-4::before{background:radial-gradient(circle at 76% 55%,#ff6a2a,transparent 37%),linear-gradient(130deg,#8a3ffc,#315cf5)}
+.project-bottom{border-color:#ded6ee}.project-bottom strong{color:var(--pink)}
+.closing{background:#171326}.closing-head span{font-family:'Instrument Serif',serif;font-weight:400;font-style:italic;color:#ff86ba}.closing-links a:hover{color:var(--yellow)}
+.overlay{background:#100c27c9}.sheet{background:#fffdf8;box-shadow:0 35px 110px #08041b88}.sheet-head{background:linear-gradient(115deg,#f0e7ff,#fce6f0)}.sheet-head h3{letter-spacing:-.05em}.close{background:#12131a}.close:hover{background:var(--pink)}.download-panel{background:#f3edff}.download-panel .repo-download{background:linear-gradient(100deg,var(--pink),var(--violet),var(--blue));color:white}.sheet-foot a{color:var(--pink)}
+::selection{background:var(--pink);color:white}
+</style></head><body>
+<nav class="topbar" aria-label="Main navigation"><a class="logo" href="#top">fluffy<i>coding.</i></a><div class="toplinks"><a href="#collection">THE COLLECTION</a><a href="https://zarirmadon.com" target="_blank" rel="noopener">PHOTOGRAPHY ↗</a><a href="https://zmcreative.art" target="_blank" rel="noopener">ZM CREATIVE ↗</a></div><a class="nav-contact" href="https://github.com/zarirmadon" target="_blank" rel="noopener">GITHUB ↗</a></nav>
+<header class="hero" id="top"><span class="hero-edge">INDEPENDENT CREATIVE EXPERIMENTS / 2026</span><div class="hero-inner"><span class="eyebrow">CREATIVE CODE BY ZARIR MADON — 001</span><h1 class="hero-title"><span>fluffy</span><span class="second">coding.</span></h1><div class="hero-bottom"><p class="hero-copy">A curious collection of tools for making, shaping and reimagining images. Built for artists, by an artist.</p><a href="#collection" class="round-arrow" aria-label="Explore projects">↓</a></div></div></header>
+<section class="intro"><div><span class="section-id">01 — ABOUT THE WORK</span><h2>Art meets<br><em>algorithm.</em></h2></div><p>From GIMP plugins to G’MIC filters and little experiments in between. <strong>Everything starts with a creative question.</strong> The code is simply how we explore the answer.</p></section>
+<main class="collection" id="collection"><div class="collection-head"><div><span class="section-id">02 — OPEN SOURCE ARCHIVE</span><h2>Selected<br><span>projects.</span></h2></div><div class="filters"><label for="search-input">FIND SOMETHING SPECIFIC</label><input id="search-input" type="search" placeholder="Search plugins, filters, repositories…" autocomplete="off" /></div></div><div class="collection-strip"><span><b id="stat-count">—</b> PROJECT FOLDERS</span><span>PUBLIC GITHUB REPOSITORIES / AUTOMATIC INDEX</span></div><div class="projects" id="plugin-grid"><div class="status">Loading the collection…</div></div></main>
+<footer class="closing"><p class="section-id">03 — KEEP EXPERIMENTING</p><h2 class="closing-head">Keep<br><span>making.</span> ↗</h2><div class="closing-links"><a href="https://github.com/zarirmadon" target="_blank" rel="noopener">GITHUB ↗</a><a href="https://zarirmadon.com" target="_blank" rel="noopener">ZARIR MADON ↗</a><a href="https://zmcreative.art" target="_blank" rel="noopener">ZM CREATIVE ↗</a></div><div class="closing-bottom"><span>FLUFFY CODING / BY ZARIR MADON</span><span>© <span id="year"></span> · OPEN SOURCE PROJECT INDEX</span></div></footer>
+<div id="modal-backdrop" class="overlay hidden opacity-0" role="presentation"><section id="modal-container" class="sheet scale-95" role="dialog" aria-modal="true" aria-labelledby="modal-title"><div class="sheet-head"><div><span class="sheet-kicker">PROJECT / SOURCE FILES / DOCUMENTATION</span><h3 id="modal-title">Project details</h3><p id="modal-subtitle"></p></div><button id="modal-close-btn" class="close" aria-label="Close project">×</button></div><div class="sheet-body"><aside class="download-panel"><h4>DOWNLOADS</h4><p>Download individual files from this project folder, or the complete source repository.</p><a id="modal-zip-download" class="repo-download" target="_blank" rel="noopener">DOWNLOAD REPOSITORY ZIP ↗</a><h4>INDIVIDUAL FILES</h4><div id="modal-files-list" class="file-list"></div></aside><section class="readme-panel"><h4>PROJECT DOCUMENTATION / README</h4><div id="modal-readme-content" class="markdown-body"></div></section></div><div class="sheet-foot"><span>FLUFFY CODING / OPEN SOURCE ARCHIVE</span><a id="modal-github-link" target="_blank" rel="noopener">VIEW ON GITHUB ↗</a></div></section></div>
+<script>
     'use strict';
     document.getElementById('year').textContent = new Date().getFullYear();
     const GITHUB_USER = 'zarirmadon';
@@ -357,7 +56,6 @@
     const IGNORE_DIRS = new Set(['.github','.git','node_modules','vendor','venv','.venv','__pycache__','tests','test','docs','images','assets','screenshots','examples']);
     const CACHE_KEY = 'fluffy-public-index-v4';
     const CACHE_MS = 24 * 60 * 60 * 1000;
-    const gradients = ['from-purple-900/80 via-indigo-900/60 to-slate-900','from-pink-900/80 via-purple-900/60 to-slate-900','from-cyan-900/80 via-blue-900/60 to-slate-900','from-emerald-900/80 via-teal-900/60 to-slate-900','from-amber-900/80 via-orange-900/60 to-slate-900'];
     const grid = document.getElementById('plugin-grid');
     const search = document.getElementById('search-input');
     let allPlugins = [];
@@ -419,7 +117,7 @@
       return {items:items.sort((a,b)=>a.name.localeCompare(b.name)||a.id.localeCompare(b.id)),failed};
     }
     function showStatus(message) {
-      grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 glass-card rounded-2xl p-6">${escapeHtml(message)}</div>`;
+      grid.innerHTML = `<div class="status">${escapeHtml(message)}</div>`;
     }
     async function loadPlugins() {
       try {
@@ -450,18 +148,22 @@
       grid.replaceChildren();
       if (!items.length) { showStatus('No matching project folders found.'); return; }
       items.forEach((item,index)=>{
-        const card=document.createElement('div');
-        card.className='glass-card rounded-2xl overflow-hidden border border-slate-800 hover:border-purple-500/40 transition-all duration-300 flex flex-col justify-between group cursor-pointer shadow-lg hover:-translate-y-1';
+        const card=document.createElement('article');
+        const featured=index<2;
+        card.className='project '+(featured?'feature':'compact');
         card.tabIndex=0;
         card.setAttribute('role','button');
-        const preview=item.files.find(f => /^preview\.(png|jpe?g|webp)$/i.test(f.name));
-        card.innerHTML=`<div><div class="relative w-full h-36 bg-slate-900 overflow-hidden border-b border-slate-800">
-          <div class="absolute inset-0 bg-gradient-to-br ${gradients[index%gradients.length]} opacity-90"></div>
-          ${preview?`<img src="${escapeHtml(rawUrl(item.repo,preview.path))}" alt="" loading="lazy" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">`:''}
-          <div class="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-slate-950/70 border border-slate-700/60 text-[10px] font-mono text-purple-300">${item.name.toLowerCase().includes('gmic')||item.files.some(f=>f.name.endsWith('.gmic'))?'G’MIC':'Project folder'}</div></div>
-          <div class="p-5"><h3 class="font-display font-bold text-base text-white group-hover:text-purple-300 transition-colors mb-1.5 break-words">${escapeHtml(item.name)}</h3>
-          <p class="text-xs text-cyan-400 mb-2">${escapeHtml(item.repo.name)}</p><p class="text-xs text-slate-400 leading-relaxed line-clamp-2">${escapeHtml(item.description)}</p></div></div>
-          <div class="px-5 pb-5"><div class="w-full py-2.5 rounded-xl bg-slate-900/90 border border-slate-700/60 text-xs font-semibold text-purple-300 text-center">View files & documentation →</div></div>`;
+        const preview=item.files.find(f=>/^preview\.(png|jpe?g|webp)$/i.test(f.name));
+        const type=item.files.some(f=>/\.gmic$/i.test(f.name))?'G’MIC FILTER':item.files.some(f=>/\.py$/i.test(f.name))?'PYTHON / GIMP':'SOURCE CODE';
+        const numeral=String(index+1).padStart(2,'0');
+        card.innerHTML=`<div class="project-art art-${index%5}">
+          ${preview?`<img src="${escapeHtml(rawUrl(item.repo,preview.path))}" alt="" loading="lazy" onerror="this.style.display='none'">`:''}
+          <span class="art-monogram" aria-hidden="true">${escapeHtml(item.name.charAt(0).toUpperCase())}</span>
+          <span class="art-label">${escapeHtml(type)} / ${numeral}</span>
+          <span class="art-corner" aria-hidden="true">↗</span>
+        </div><div class="project-info"><div class="project-meta"><span>${numeral} / ${escapeHtml(type)}</span><span>PUBLIC REPOSITORY</span></div>
+          <h3>${escapeHtml(item.name.replace(/[-_]/g,' '))}</h3><p>${escapeHtml(item.description)}</p>
+          <div class="project-bottom"><span>${escapeHtml(item.repo.name)}</span><strong>EXPLORE PROJECT <span aria-hidden="true">↗</span></strong></div></div>`;
         card.onclick=()=>openModal(item);
         card.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openModal(item);}};
         grid.appendChild(card);
@@ -523,6 +225,4 @@
       renderGrid(allPlugins.filter(p=>(p.name+' '+p.path+' '+p.repo.name+' '+p.description).toLowerCase().includes(q)));
     });
     loadPlugins();
-  </script>
-</body>
-</html>
+  </script></body></html>
