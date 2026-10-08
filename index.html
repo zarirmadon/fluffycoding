@@ -13,6 +13,7 @@
   
   <!-- Marked.js for Markdown Rendering inside Modal -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
 
   <script>
     tailwind.config = {
@@ -174,17 +175,17 @@
     <div id="stats-bar" class="mt-8 max-w-xl mx-auto glass-panel rounded-2xl p-4 flex justify-around items-center divide-x divide-slate-800 border border-slate-800/80 shadow-2xl">
       <div class="px-3 text-center">
         <div id="stat-count" class="font-display text-2xl font-bold text-purple-400">--</div>
-        <div class="text-xs text-slate-400 font-medium uppercase tracking-wider">Repositories</div>
+        <div class="text-xs text-slate-400 font-medium uppercase tracking-wider">Indexed Folders</div>
       </div>
       <div class="px-3 text-center">
         <div class="font-display text-2xl font-bold text-cyan-400">Open</div>
         <div class="text-xs text-slate-400 font-medium uppercase tracking-wider">Source</div>
       </div>
       <div class="px-3 text-center">
-        <a href="https://github.com/zarirmadon/fluffycoding" target="_blank" class="font-display text-xs sm:text-sm font-bold text-pink-400 hover:text-pink-300 flex items-center gap-1 justify-center transition-colors">
-          View GitHub Repo <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+        <a href="https://github.com/zarirmadon" target="_blank" class="font-display text-xs sm:text-sm font-bold text-pink-400 hover:text-pink-300 flex items-center gap-1 justify-center transition-colors">
+          GitHub Profile <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
         </a>
-        <div class="text-xs text-slate-400 font-medium uppercase tracking-wider">Main Branch</div>
+        <div class="text-xs text-slate-400 font-medium uppercase tracking-wider">Public Repositories</div>
       </div>
     </div>
   </header>
@@ -253,7 +254,7 @@
           <span class="gradient-text">Zarir Madon</span> • Fluffy Coding
         </div>
         <p class="text-xs text-slate-500 max-w-md">
-          Open-source repository of creative automation tools, color grading algorithms, and Linux enhancement scripts.
+          A public index of creative automation tools, image-processing plugins, filters and Linux scripts.
         </p>
       </div>
 
@@ -268,7 +269,7 @@
     </div>
     
     <div class="max-w-7xl mx-auto mt-8 pt-6 border-t border-slate-900 text-center text-xs text-slate-600">
-      © <span id="year"></span> Zarir Madon. Open source under GPL-3.0 License.
+      © <span id="year"></span> Zarir Madon. Individual projects retain their own licences.
     </div>
   </footer>
 
@@ -303,11 +304,11 @@
               <h4 class="font-display font-bold text-white text-base flex items-center gap-2">
                 <i class="fa-solid fa-download text-purple-400"></i> Download Plugin Files
               </h4>
-              <p class="text-xs text-slate-400 mt-0.5">Includes Python scripts, documentation, and asset files.</p>
+              <p class="text-xs text-slate-400 mt-0.5">Files belonging to this project folder.</p>
             </div>
 
             <a id="modal-zip-download" href="#" target="_blank" class="w-full sm:w-auto px-4 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-medium text-xs flex items-center justify-center gap-2 shadow-lg shadow-purple-900/40 transition-all">
-              <i class="fa-solid fa-file-zipper"></i> Download Repo (.zip)
+              <i class="fa-solid fa-file-zipper"></i> Download Repository (.zip)
             </a>
           </div>
 
@@ -336,7 +337,7 @@
       <!-- Modal Footer -->
       <div class="p-4 border-t border-slate-800 bg-slate-900/80 flex items-center justify-between text-xs text-slate-400">
         <span class="flex items-center gap-1.5">
-          <i class="fa-solid fa-shield-halved text-emerald-400"></i> GPL-3.0 Licensed Code
+          <i class="fa-solid fa-shield-halved text-emerald-400"></i> Check each project’s licence
         </span>
         <a id="modal-github-link" href="#" target="_blank" class="text-purple-400 hover:text-purple-300 flex items-center gap-1 hover:underline">
           View on GitHub <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
@@ -347,256 +348,181 @@
   </div>
 
   <script>
+    'use strict';
     document.getElementById('year').textContent = new Date().getFullYear();
-
     const GITHUB_USER = 'zarirmadon';
-    const GITHUB_REPO = 'fluffycoding';
-    const GITHUB_BRANCH = 'main';
-    const API_BASE = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents`;
-
+    const API = 'https://api.github.com';
+    const EXCLUDED_REPOSITORIES = new Set(['fluffycoding']); // Also omit private repos (API never returns them).
+    const CODE_EXTENSIONS = /\.(?:py|gmic|scm|c|cc|cpp|h|hpp|sh|bash|lua|js|ts|rs|go)$/i;
+    const IGNORE_DIRS = new Set(['.github','.git','node_modules','vendor','venv','.venv','__pycache__','tests','test','docs','images','assets','screenshots','examples']);
+    const CACHE_KEY = 'fluffy-public-index-v4';
+    const CACHE_MS = 24 * 60 * 60 * 1000;
+    const gradients = ['from-purple-900/80 via-indigo-900/60 to-slate-900','from-pink-900/80 via-purple-900/60 to-slate-900','from-cyan-900/80 via-blue-900/60 to-slate-900','from-emerald-900/80 via-teal-900/60 to-slate-900','from-amber-900/80 via-orange-900/60 to-slate-900'];
+    const grid = document.getElementById('plugin-grid');
+    const search = document.getElementById('search-input');
     let allPlugins = [];
+    let modalNonce = 0;
+    const escapeHtml = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const urlPath = path => path.split('/').map(encodeURIComponent).join('/');
+    const rawUrl = (repo, path) => `https://raw.githubusercontent.com/${encodeURIComponent(GITHUB_USER)}/${encodeURIComponent(repo.name)}/${encodeURIComponent(repo.default_branch)}/${urlPath(path)}`;
+    const webUrl = (repo, path) => `https://github.com/${encodeURIComponent(GITHUB_USER)}/${encodeURIComponent(repo.name)}/tree/${encodeURIComponent(repo.default_branch)}/${urlPath(path)}`;
+    const errorMessage = e => String(e?.message || e);
 
-    // Fallback colorful gradient list for folders without preview images
-    const fallbackGradients = [
-      'from-purple-900/80 via-indigo-900/60 to-slate-900',
-      'from-pink-900/80 via-purple-900/60 to-slate-900',
-      'from-cyan-900/80 via-blue-900/60 to-slate-900',
-      'from-emerald-900/80 via-teal-900/60 to-slate-900',
-      'from-amber-900/80 via-orange-900/60 to-slate-900',
-    ];
-
-    // Select random visual icon for folders
-    function getPluginIcon(name) {
-      const lower = name.toLowerCase();
-      if (lower.includes('gimp') || lower.includes('paint') || lower.includes('color')) return 'fa-paintbrush text-purple-400';
-      if (lower.includes('gmic') || lower.includes('filter')) return 'fa-wand-magic-sparkles text-pink-400';
-      if (lower.includes('gegl') || lower.includes('gallery')) return 'fa-layer-group text-cyan-400';
-      if (lower.includes('meta') || lower.includes('select')) return 'fa-sliders text-emerald-400';
-      if (lower.includes('python') || lower.includes('script')) return 'fa-code text-amber-400';
-      return 'fa-cube text-indigo-400';
-    }
-
-    async function loadPlugins() {
-      const grid = document.getElementById('plugin-grid');
-      const statCount = document.getElementById('stat-count');
-
-      try {
-        const response = await fetch(API_BASE);
-        if (!response.ok) throw new Error(`GitHub API error: ${response.status}`);
-        
-        const contents = await response.json();
-        
-        // Filter out non-folder items
-        const folders = contents.filter(item => item.type === 'dir');
-        allPlugins = folders;
-
-        statCount.textContent = folders.length;
-
-        if (folders.length === 0) {
-          grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-500">No plugin folders found in repository.</div>`;
-          return;
-        }
-
-        renderGrid(folders);
-
-      } catch (err) {
-        console.error('Failed to load repository folders:', err);
-        grid.innerHTML = `
-          <div class="col-span-full text-center py-12 text-slate-400 glass-card rounded-2xl p-6">
-            <i class="fa-solid fa-triangle-exclamation text-amber-400 text-3xl mb-3"></i>
-            <h3 class="text-lg font-bold text-white mb-1">Could not load repository content</h3>
-            <p class="text-xs text-slate-500 mb-4">${err.message}</p>
-            <a href="https://github.com/${GITHUB_USER}/${GITHUB_REPO}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold">
-              Visit GitHub Directly <i class="fa-solid fa-arrow-up-right-from-square"></i>
-            </a>
-          </div>
-        `;
+    async function apiGet(url) {
+      const response = await fetch(url, {headers:{'Accept':'application/vnd.github+json'}});
+      if (!response.ok) {
+        const limit = response.status === 403 || response.status === 429;
+        throw new Error(limit ? 'GitHub API rate limit reached. Please reload later.' : `GitHub API returned HTTP ${response.status}`);
       }
+      return response.json();
     }
-
-    function renderGrid(folders) {
-      const grid = document.getElementById('plugin-grid');
-      grid.innerHTML = '';
-
-      folders.forEach((folder, index) => {
-        const gradient = fallbackGradients[index % fallbackGradients.length];
-        const iconClass = getPluginIcon(folder.name);
-
-        // Raw image URLs for potential previews
-        const previewPng = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${encodeURIComponent(folder.name)}/preview.png`;
-
-        const card = document.createElement('div');
-        card.className = 'glass-card rounded-2xl overflow-hidden border border-slate-800 hover:border-purple-500/40 transition-all duration-300 flex flex-col justify-between group cursor-pointer shadow-lg hover:-translate-y-1';
-        
-        card.onclick = () => openModal(folder);
-
-        card.innerHTML = `
-          <div>
-            <!-- Poster / Image Box -->
-            <div class="relative w-full h-36 bg-slate-900 overflow-hidden border-b border-slate-800">
-              <div class="absolute inset-0 bg-gradient-to-br ${gradient} opacity-90 group-hover:scale-105 transition-transform duration-500"></div>
-              
-              <!-- Try loading preview image if present -->
-              <img 
-                src="${previewPng}" 
-                alt="${folder.name}" 
-                class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300" 
-                onload="this.classList.remove('opacity-0')" 
-                onerror="this.style.display='none'"
-              />
-
-              <div class="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-slate-950/70 backdrop-blur-md border border-slate-700/60 text-[10px] font-mono text-purple-300 flex items-center gap-1.5">
-                <i class="fa-solid ${iconClass}"></i> Folder
-              </div>
-            </div>
-
-            <!-- Content Area -->
-            <div class="p-5">
-              <h3 class="font-display font-bold text-base text-white group-hover:text-purple-300 transition-colors line-clamp-1 mb-1.5">
-                ${folder.name}
-              </h3>
-              <p class="text-xs text-slate-400 leading-relaxed line-clamp-2">
-                GIMP & Linux utility module. Click to view full installation guide and download script files.
-              </p>
-            </div>
-          </div>
-
-          <!-- Card Action Button -->
-          <div class="px-5 pb-5 pt-0">
-            <button class="w-full py-2.5 rounded-xl bg-slate-900/90 hover:bg-purple-600/20 border border-slate-700/60 hover:border-purple-500/50 text-xs font-semibold text-purple-300 group-hover:text-white flex items-center justify-center gap-2 transition-all">
-              <span>View & Download</span>
-              <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
-            </button>
-          </div>
-        `;
-
+    async function listRepos() {
+      const repos = [];
+      for (let page=1; page<=20; page++) {
+        const batch = await apiGet(`${API}/users/${encodeURIComponent(GITHUB_USER)}/repos?type=owner&per_page=100&page=${page}`);
+        if (!Array.isArray(batch)) throw new Error('Unexpected repository response');
+        repos.push(...batch.filter(r => !r.private && !r.archived && !r.fork && !EXCLUDED_REPOSITORIES.has(r.name.toLowerCase())));
+        if (batch.length < 100) break;
+      }
+      return repos;
+    }
+    async function indexRepo(repo) {
+      const tree = await apiGet(`${API}/repos/${encodeURIComponent(GITHUB_USER)}/${encodeURIComponent(repo.name)}/git/trees/${encodeURIComponent(repo.default_branch)}?recursive=1`);
+      if (tree.truncated) throw new Error(`Tree truncated for ${repo.name}`);
+      const folders = new Map();
+      for (const file of tree.tree || []) {
+        if (file.type !== 'blob' || !file.path.includes('/')) continue; // Only individual project folders.
+        const chunks = file.path.split('/');
+        if (chunks.slice(0,-1).some(d => IGNORE_DIRS.has(d.toLowerCase()))) continue;
+        const name = chunks.pop();
+        const folderPath = chunks.join('/');
+        if (!folders.has(folderPath)) folders.set(folderPath, []);
+        folders.get(folderPath).push({name, path:file.path, size:file.size ?? 0});
+      }
+      return [...folders].filter(([path,files]) => files.some(f => CODE_EXTENSIONS.test(f.name))).map(([path,files]) => ({
+        id:`${repo.name}/${path}`, name:path.split('/').pop(), path, repo:{name:repo.name,default_branch:repo.default_branch,html_url:repo.html_url,description:repo.description}, files,
+        description:repo.description || 'Creative tool source files',
+      }));
+    }
+    async function scan(repos) {
+      let next=0;
+      const items=[];
+      const failed=[];
+      async function worker() {
+        while (next<repos.length) {
+          const repo = repos[next++];
+          try { items.push(...await indexRepo(repo)); }
+          catch(e) { failed.push(`${repo.name}: ${errorMessage(e)}`); }
+        }
+      }
+      await Promise.all(Array.from({length:Math.min(3,repos.length)},worker));
+      return {items:items.sort((a,b)=>a.name.localeCompare(b.name)||a.id.localeCompare(b.id)),failed};
+    }
+    function showStatus(message) {
+      grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 glass-card rounded-2xl p-6">${escapeHtml(message)}</div>`;
+    }
+    async function loadPlugins() {
+      try {
+        const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
+        if (cached && Date.now()-cached.at<CACHE_MS) {
+          allPlugins=cached.items; renderGrid(allPlugins); showWarning(cached.failed); return;
+        }
+      } catch (_) { /* Continue without local storage. */ }
+      showStatus('Discovering public repositories and project folders…');
+      try {
+        const repos = await listRepos();
+        const {items,failed} = await scan(repos);
+        allPlugins=items;
+        renderGrid(items);
+        showWarning(failed);
+        try { localStorage.setItem(CACHE_KEY,JSON.stringify({at:Date.now(),items,failed})); } catch (_) {}
+      } catch(e) { showStatus(`Could not load the public catalogue: ${errorMessage(e)}`); }
+    }
+    function showWarning(failed) {
+      if (!failed?.length) return;
+      const warning=document.createElement('p');
+      warning.className='col-span-full text-amber-400 text-xs';
+      warning.textContent=`Some repositories could not be scanned (${failed.length}); the catalogue may be incomplete. ${failed[0]}`;
+      grid.prepend(warning);
+    }
+    function renderGrid(items) {
+      document.getElementById('stat-count').textContent=allPlugins.length;
+      grid.replaceChildren();
+      if (!items.length) { showStatus('No matching project folders found.'); return; }
+      items.forEach((item,index)=>{
+        const card=document.createElement('div');
+        card.className='glass-card rounded-2xl overflow-hidden border border-slate-800 hover:border-purple-500/40 transition-all duration-300 flex flex-col justify-between group cursor-pointer shadow-lg hover:-translate-y-1';
+        card.tabIndex=0;
+        card.setAttribute('role','button');
+        const preview=item.files.find(f => /^preview\.(png|jpe?g|webp)$/i.test(f.name));
+        card.innerHTML=`<div><div class="relative w-full h-36 bg-slate-900 overflow-hidden border-b border-slate-800">
+          <div class="absolute inset-0 bg-gradient-to-br ${gradients[index%gradients.length]} opacity-90"></div>
+          ${preview?`<img src="${escapeHtml(rawUrl(item.repo,preview.path))}" alt="" loading="lazy" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">`:''}
+          <div class="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-slate-950/70 border border-slate-700/60 text-[10px] font-mono text-purple-300">${item.name.toLowerCase().includes('gmic')||item.files.some(f=>f.name.endsWith('.gmic'))?'G’MIC':'Project folder'}</div></div>
+          <div class="p-5"><h3 class="font-display font-bold text-base text-white group-hover:text-purple-300 transition-colors mb-1.5 break-words">${escapeHtml(item.name)}</h3>
+          <p class="text-xs text-cyan-400 mb-2">${escapeHtml(item.repo.name)}</p><p class="text-xs text-slate-400 leading-relaxed line-clamp-2">${escapeHtml(item.description)}</p></div></div>
+          <div class="px-5 pb-5"><div class="w-full py-2.5 rounded-xl bg-slate-900/90 border border-slate-700/60 text-xs font-semibold text-purple-300 text-center">View files & documentation →</div></div>`;
+        card.onclick=()=>openModal(item);
+        card.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openModal(item);}};
         grid.appendChild(card);
       });
     }
-
-    async function openModal(folder) {
-      const backdrop = document.getElementById('modal-backdrop');
-      const container = document.getElementById('modal-container');
-      const title = document.getElementById('modal-title');
-      const subtitle = document.getElementById('modal-subtitle');
-      const readmeContainer = document.getElementById('modal-readme-content');
-      const filesList = document.getElementById('modal-files-list');
-      const zipBtn = document.getElementById('modal-zip-download');
-      const githubLink = document.getElementById('modal-github-link');
-
-      title.textContent = folder.name;
-      subtitle.textContent = `zarirmadon/fluffycoding/tree/main/${folder.name}`;
-      
-      githubLink.href = folder.html_url;
-      zipBtn.href = `https://github.com/${GITHUB_USER}/${GITHUB_REPO}/archive/refs/heads/${GITHUB_BRANCH}.zip`;
-
-      readmeContainer.innerHTML = `<div class="text-xs text-slate-400 py-6 text-center animate-pulse"><i class="fa-solid fa-spinner fa-spin text-purple-400 mr-2"></i>Loading documentation (README.md)...</div>`;
-      filesList.innerHTML = `<div class="text-xs text-slate-400 py-2 col-span-full animate-pulse"><i class="fa-solid fa-spinner fa-spin text-purple-400 mr-2"></i>Fetching folder files...</div>`;
-
-      // Show modal
-      backdrop.classList.remove('hidden');
-      setTimeout(() => {
-        backdrop.classList.remove('opacity-0');
-        container.classList.remove('scale-95');
-        container.classList.add('scale-100');
-      }, 10);
-
-      try {
-        // Fetch folder contents
-        const folderRes = await fetch(`${API_BASE}/${encodeURIComponent(folder.name)}`);
-        if (!folderRes.ok) throw new Error('Failed to fetch folder contents');
-        const files = await folderRes.json();
-
-        // 1. Render Downloadable Files List (excluding preview.png/jpg)
-        const downloadableFiles = files.filter(f => {
-          const name = f.name.toLowerCase();
-          return f.type === 'file' && name !== 'preview.png' && name !== 'preview.jpg';
-        });
-
-        if (downloadableFiles.length === 0) {
-          filesList.innerHTML = `<div class="text-xs text-slate-500 py-1 col-span-full">No downloadable files found.</div>`;
-        } else {
-          filesList.innerHTML = '';
-          downloadableFiles.forEach(file => {
-            const fileItem = document.createElement('div');
-            fileItem.className = 'flex items-center justify-between p-2 rounded-lg bg-slate-900/80 border border-slate-800 text-xs text-slate-200';
-            
-            // Raw download link
-            const rawUrl = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${encodeURIComponent(folder.name)}/${encodeURIComponent(file.name)}`;
-
-            fileItem.innerHTML = `
-              <div class="flex items-center gap-2 overflow-hidden mr-2">
-                <i class="fa-regular fa-file-code text-cyan-400 shrink-0"></i>
-                <span class="truncate font-mono text-[11px]">${file.name}</span>
-              </div>
-              <a 
-                href="${rawUrl}" 
-                download="${file.name}" 
-                target="_blank"
-                class="px-2.5 py-1 rounded-md bg-purple-600/20 hover:bg-purple-600 border border-purple-500/40 text-purple-300 hover:text-white font-medium text-[10px] shrink-0 flex items-center gap-1 transition-all"
-              >
-                <i class="fa-solid fa-download"></i> Download
-              </a>
-            `;
-            filesList.appendChild(fileItem);
-          });
-        }
-
-        // 2. Fetch and Render README.md
-        const readmeFile = files.find(f => f.name.toLowerCase() === 'readme.md');
-
-        if (readmeFile) {
-          const rawReadmeUrl = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${encodeURIComponent(folder.name)}/${encodeURIComponent(readmeFile.name)}`;
-          const readmeRes = await fetch(rawReadmeUrl);
-          
-          if (readmeRes.ok) {
-            const markdownText = await readmeRes.text();
-            readmeContainer.innerHTML = marked.parse(markdownText);
-          } else {
-            readmeContainer.innerHTML = `<p class="text-slate-500 italic">Could not load README.md file content.</p>`;
-          }
-        } else {
-          readmeContainer.innerHTML = `
-            <div class="text-center py-6 text-slate-500">
-              <i class="fa-solid fa-circle-info text-slate-600 text-2xl mb-2"></i>
-              <p class="text-xs">No <code>README.md</code> documentation file was found in this folder.</p>
-            </div>
-          `;
-        }
-
-      } catch (err) {
-        console.error(err);
-        readmeContainer.innerHTML = `<p class="text-rose-400 text-xs">Error loading modal data: ${err.message}</p>`;
+    async function openModal(item) {
+      const nonce=++modalNonce;
+      const backdrop=document.getElementById('modal-backdrop');
+      document.getElementById('modal-title').textContent=item.name;
+      document.getElementById('modal-subtitle').textContent=item.id;
+      document.getElementById('modal-github-link').href=webUrl(item.repo,item.path);
+      document.getElementById('modal-zip-download').href=`https://github.com/${encodeURIComponent(GITHUB_USER)}/${encodeURIComponent(item.repo.name)}/archive/refs/heads/${encodeURIComponent(item.repo.default_branch)}.zip`;
+      const filesList=document.getElementById('modal-files-list');
+      const readme=document.getElementById('modal-readme-content');
+      filesList.replaceChildren();
+      const files=item.files.filter(f => !/^preview\.(png|jpe?g|webp)$/i.test(f.name));
+      for (const file of files) {
+        const line=document.createElement('div');
+        line.className='flex items-center justify-between gap-2 p-2 rounded-lg bg-slate-900/80 border border-slate-800 text-xs';
+        const name=document.createElement('span');
+        name.className='truncate font-mono text-[11px]'; name.textContent=file.name;
+        const link=document.createElement('a');
+        link.className='px-2.5 py-1 rounded-md bg-purple-600/20 border border-purple-500/40 text-purple-300 shrink-0';
+        link.textContent='Download';link.href=rawUrl(item.repo,file.path);link.target='_blank';link.rel='noopener noreferrer';
+        line.append(name,link); filesList.appendChild(line);
       }
+      if (!files.length) filesList.textContent='No downloadable files in this folder.';
+      backdrop.classList.remove('hidden');
+      requestAnimationFrame(()=>{backdrop.classList.remove('opacity-0');document.getElementById('modal-container').classList.add('scale-100');});
+      readme.textContent='Loading README…';
+      const readmeFile=item.files.find(f=>f.name.toLowerCase()==='readme.md');
+      if (!readmeFile) { readme.textContent='No README.md in this project folder.'; return; }
+      try {
+        const response=await fetch(rawUrl(item.repo,readmeFile.path));
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const md=await response.text();
+        if (nonce!==modalNonce) return;
+        const html=marked.parse(md);
+        readme.innerHTML=DOMPurify.sanitize(html);
+        readme.querySelectorAll('a').forEach(a=>{
+          const href=a.getAttribute('href')||'';
+          if (/^(?![a-z]+:|\/\/|#)/i.test(href)) a.href=webUrl(item.repo,item.path)+'/'+urlPath(href);
+          a.target='_blank';a.rel='noopener noreferrer';
+        });
+      } catch(e) { if(nonce===modalNonce)readme.textContent=`Could not load README: ${errorMessage(e)}`; }
     }
-
-    // Modal Close Logic
     function closeModal() {
-      const backdrop = document.getElementById('modal-backdrop');
-      const container = document.getElementById('modal-container');
-
+      modalNonce++;
+      const backdrop=document.getElementById('modal-backdrop');
       backdrop.classList.add('opacity-0');
-      container.classList.remove('scale-100');
-      container.classList.add('scale-95');
-
-      setTimeout(() => {
-        backdrop.classList.add('hidden');
-      }, 300);
+      document.getElementById('modal-container').classList.remove('scale-100');
+      setTimeout(()=>backdrop.classList.add('hidden'),300);
     }
-
-    document.getElementById('modal-close-btn').onclick = closeModal;
-    document.getElementById('modal-backdrop').onclick = (e) => {
-      if (e.target.id === 'modal-backdrop') closeModal();
-    };
-
-    document.getElementById('search-input').addEventListener('input', (e) => {
-      const term = e.target.value.toLowerCase().trim();
-      const filtered = allPlugins.filter(p => p.name.toLowerCase().includes(term));
-      renderGrid(filtered);
+    document.getElementById('modal-close-btn').onclick=closeModal;
+    document.getElementById('modal-backdrop').onclick=e=>{if(e.target.id==='modal-backdrop')closeModal();};
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+    search.addEventListener('input',()=>{
+      const q=search.value.toLowerCase().trim();
+      renderGrid(allPlugins.filter(p=>(p.name+' '+p.path+' '+p.repo.name+' '+p.description).toLowerCase().includes(q)));
     });
-
-    // Initialize on window load
-    window.onload = loadPlugins;
+    loadPlugins();
   </script>
 </body>
 </html>
